@@ -112,3 +112,4 @@ See [Roadmap](docs/ROADMAP.md) for the next community milestones.
 - Security policy: [SECURITY.md](SECURITY.md)
 - Publishing checklist: [PUBLISHING.md](PUBLISHING.md)
 - Product notes: [PRODUCT.md](PRODUCT.md)
+- Maintainer setup: [docs/MAINTAINER_SETUP.md](docs/MAINTAINER_SETUP.md)
