@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
+  <title id="title">FoodOps architecture</title>
+  <desc id="desc">A high-level architecture diagram showing Next.js frontend, FastAPI backend, PostgreSQL, Redis, imports, alerts, tasks, and audit logs.</desc>
+  <rect width="1120" height="520" fill="#ffffff"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="48" y="58" font-size="28" font-weight="800" fill="#0f172a">Architecture</text>
+    <text x="48" y="88" font-size="16" fill="#475569">Conventional, self-hosted services with a small open-source core.</text>
+    <g transform="translate(70 140)">
+      <rect width="230" height="210" rx="14" fill="#ecfeff" stroke="#99f6e4"/>
+      <text x="28" y="38" font-size="18" font-weight="800" fill="#155e75">Frontend</text>
+      <rect x="28" y="66" width="174" height="38" rx="8" fill="#ffffff" stroke="#a7f3d0"/>
+      <text x="46" y="90" font-size="14" fill="#0f172a">Next.js workbench</text>
+      <rect x="28" y="120" width="174" height="38" rx="8" fill="#ffffff" stroke="#a7f3d0"/>
+      <text x="46" y="144" font-size="14" fill="#0f172a">Ant Design UI</text>
+      <rect x="28" y="174" width="174" height="38" rx="8" fill="#ffffff" stroke="#a7f3d0"/>
+      <text x="46" y="198" font-size="14" fill="#0f172a">H5 task feedback</text>
+    </g>
+    <path d="M320 245 H430" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M420 236 L434 245 L420 254" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(450 126)">
+      <rect width="260" height="238" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+      <text x="28" y="38" font-size="18" font-weight="800" fill="#0f172a">Backend API</text>
+      <rect x="28" y="66" width="204" height="38" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="46" y="90" font-size="14" fill="#0f172a">FastAPI routes</text>
+      <rect x="28" y="116" width="204" height="38" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="46" y="140" font-size="14" fill="#0f172a">Import normalizers</text>
+      <rect x="28" y="166" width="204" height="38" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="46" y="190" font-size="14" fill="#0f172a">Alert rules and tasks</text>
+      <rect x="28" y="216" width="204" height="38" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="46" y="240" font-size="14" fill="#0f172a">Audit middleware</text>
+    </g>
+    <path d="M730 208 H820" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M810 199 L824 208 L810 217" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M730 286 H820" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M810 277 L824 286 L810 295" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(850 150)">
+      <rect width="200" height="86" rx="14" fill="#eef2ff" stroke="#c7d2fe"/>
+      <text x="28" y="38" font-size="17" font-weight="800" fill="#3730a3">PostgreSQL</text>
+      <text x="28" y="63" font-size="13" fill="#475569">business records</text>
+    </g>
+    <g transform="translate(850 270)">
+      <rect width="200" height="86" rx="14" fill="#f0fdf4" stroke="#bbf7d0"/>
+      <text x="28" y="38" font-size="17" font-weight="800" fill="#166534">Redis</text>
+      <text x="28" y="63" font-size="13" fill="#475569">cache and queue-ready</text>
+    </g>
+    <g transform="translate(224 416)">
+      <rect width="672" height="44" rx="22" fill="#f1f5f9"/>
+      <text x="40" y="28" font-size="14" fill="#334155">No required external AI provider, messaging connector, public data collector, or private cloud service.</text>
+    </g>
+  </g>
+</svg>

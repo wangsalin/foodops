@@ -1,8 +1,31 @@
 # FoodOps Community
 
+![FoodOps Community banner](docs/assets/foodops-banner.svg)
+
+[![CI](https://github.com/wangsalin/foodops/actions/workflows/ci.yml/badge.svg)](https://github.com/wangsalin/foodops/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Backend](https://img.shields.io/badge/backend-FastAPI-0f766e.svg)](backend)
+[![Frontend](https://img.shields.io/badge/frontend-Next.js-111827.svg)](frontend)
+
 FoodOps Community is a local-first operations loop for chain food and beverage teams. It keeps the smallest useful workflow open: master data, manual imports, dashboards, rule-based alerts, task dispatch, H5 task feedback, in-app notifications, and audit logs.
 
 This repository is a clean community export. Do not publish the parent/private product repository or its git history.
+
+## What It Does
+
+![FoodOps workflow](docs/assets/operations-loop.svg)
+
+- Import local business data for sales, product sales, inventory, and reviews.
+- Monitor store and product performance from an operations dashboard.
+- Convert rule-based exceptions into tasks with owners and due dates.
+- Let store teams complete H5 feedback without external messaging platforms.
+- Keep system notifications and audit logs inside the self-hosted stack.
+
+## Product Preview
+
+![FoodOps dashboard preview](docs/assets/dashboard-preview.svg)
+
+The community core is intentionally narrow. It is built for teams that want a self-hosted operating loop before investing in private integrations, enterprise messaging, AI providers, or customer-specific automation.
 
 ## Scope
 
@@ -21,6 +44,12 @@ Not included:
 - External AI model providers, prompt routing, knowledge assistants, or autonomous agent runtimes
 - Public-opinion collection, social media workflows, design generation, forecasting, and private brand assets
 - Any private customer data, browser profiles, uploads, runtime logs, or deployment secrets
+
+## Architecture
+
+![FoodOps architecture](docs/assets/architecture.svg)
+
+More detail: [Architecture Notes](docs/ARCHITECTURE.md).
 
 ## Quick Start
 
@@ -65,16 +94,21 @@ Recommended verification:
 ```bash
 cd backend
 python -m compileall app main.py scripts
+python -m py_compile alembic/versions/000001_init_community.py
 
 cd ../frontend
-npm run lint
 npm run build
 ```
 
 Community contributions should stay inside the included scope. Enterprise integrations should be proposed as plugin boundaries rather than merged into the core loop.
 
+## Roadmap
+
+See [Roadmap](docs/ROADMAP.md) for the next community milestones.
+
 ## Community
 
-- Contribution guide: `CONTRIBUTING.md`
-- Security policy: `SECURITY.md`
-- Publishing checklist: `PUBLISHING.md`
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security policy: [SECURITY.md](SECURITY.md)
+- Publishing checklist: [PUBLISHING.md](PUBLISHING.md)
+- Product notes: [PRODUCT.md](PRODUCT.md)

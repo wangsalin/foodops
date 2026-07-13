@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="360" viewBox="0 0 1120 360" role="img" aria-labelledby="title desc">
+  <title id="title">FoodOps operations loop</title>
+  <desc id="desc">The local operations loop from master data to imports, alerts, tasks, H5 feedback, notifications, and audit logs.</desc>
+  <rect width="1120" height="360" fill="#f8fafc"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="48" y="58" font-size="28" font-weight="800" fill="#0f172a">Local operations loop</text>
+    <text x="48" y="88" font-size="16" fill="#475569">A narrow, self-hosted workflow for daily store operations.</text>
+    <g transform="translate(58 138)">
+      <g>
+        <rect width="142" height="84" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <text x="20" y="34" font-size="15" font-weight="700" fill="#0f172a">Master data</text>
+        <text x="20" y="59" font-size="12" fill="#64748b">stores, products, users</text>
+      </g>
+      <path d="M152 42 H214" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M207 34 L219 42 L207 50" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(230 0)">
+        <rect width="142" height="84" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <text x="20" y="34" font-size="15" font-weight="700" fill="#0f172a">Manual imports</text>
+        <text x="20" y="59" font-size="12" fill="#64748b">sales, inventory, reviews</text>
+      </g>
+      <path d="M382 42 H444" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M437 34 L449 42 L437 50" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(460 0)">
+        <rect width="142" height="84" rx="10" fill="#fff7ed" stroke="#fed7aa"/>
+        <text x="20" y="34" font-size="15" font-weight="700" fill="#9a3412">Rule alerts</text>
+        <text x="20" y="59" font-size="12" fill="#9a3412">local exceptions</text>
+      </g>
+      <path d="M612 42 H674" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M667 34 L679 42 L667 50" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(690 0)">
+        <rect width="142" height="84" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="20" y="34" font-size="15" font-weight="700" fill="#1d4ed8">Tasks</text>
+        <text x="20" y="59" font-size="12" fill="#1d4ed8">owner, due date, state</text>
+      </g>
+      <path d="M842 42 H904" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M897 34 L909 42 L897 50" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(920 0)">
+        <rect width="142" height="84" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
+        <text x="20" y="34" font-size="15" font-weight="700" fill="#15803d">H5 feedback</text>
+        <text x="20" y="59" font-size="12" fill="#15803d">store completion</text>
+      </g>
+    </g>
+    <g transform="translate(286 274)">
+      <rect width="548" height="46" rx="23" fill="#e2e8f0"/>
+      <text x="52" y="29" font-size="14" font-weight="700" fill="#334155">Notifications and audit logs make every step traceable.</text>
+    </g>
+  </g>
+</svg>

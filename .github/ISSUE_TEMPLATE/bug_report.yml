@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible issue in the community core.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps, input files, or demo data path.
+      placeholder: |
+        1. Start backend...
+        2. Import...
+        3. Open...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Windows 11, Python 3.12, Node 20
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Scope check
+      options:
+        - label: This issue is about the community core, not a private enterprise connector.
+          required: true
+        - label: I did not include secrets, private customer data, uploads, logs, or browser profiles.
+          required: true

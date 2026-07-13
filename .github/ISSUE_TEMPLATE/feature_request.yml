@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose a scoped improvement for FoodOps Community.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the smallest useful change.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Product area
+      options:
+        - Master data
+        - Imports
+        - Dashboard
+        - Alerts
+        - Tasks
+        - H5 feedback
+        - Notifications
+        - Audit logs
+        - Developer experience
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Scope check
+      options:
+        - label: This belongs in the community core.
+          required: true
+        - label: This does not require WeCom, Feishu, external AI providers, SSO, public-opinion collection, or customer-specific connectors.
+          required: true
