@@ -72,3 +72,9 @@ npm run build
 ```
 
 Community contributions should stay inside the included scope. Enterprise integrations should be proposed as plugin boundaries rather than merged into the core loop.
+
+## Community
+
+- Contribution guide: `CONTRIBUTING.md`
+- Security policy: `SECURITY.md`
+- Publishing checklist: `PUBLISHING.md`
