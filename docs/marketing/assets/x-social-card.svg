@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">FoodOps Community social card</title>
+  <desc id="desc">A social launch card for FoodOps Community.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="0.55" stop-color="#155e75"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#020617" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <path d="M0 680 C210 610 370 780 570 672 C760 570 920 600 1090 690 C1280 790 1420 690 1600 620 L1600 900 L0 900 Z" fill="#ffffff" opacity="0.11"/>
+  <g transform="translate(92 110)">
+    <rect width="570" height="470" rx="28" fill="#f8fafc" filter="url(#shadow)"/>
+    <rect x="42" y="42" width="486" height="58" rx="12" fill="#e5f6f4"/>
+    <circle cx="72" cy="71" r="11" fill="#0f766e"/>
+    <rect x="100" y="60" width="210" height="22" rx="11" fill="#0f766e"/>
+    <rect x="386" y="58" width="110" height="26" rx="13" fill="#ccfbf1"/>
+    <g transform="translate(42 145)">
+      <rect width="145" height="138" rx="14" fill="#ffffff" stroke="#dbe4e8"/>
+      <text x="20" y="42" font-family="Inter, Arial, sans-serif" font-size="18" fill="#334155">Imported</text>
+      <text x="20" y="91" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#0f766e">12.8k</text>
+    </g>
+    <g transform="translate(212 145)">
+      <rect width="145" height="138" rx="14" fill="#ffffff" stroke="#dbe4e8"/>
+      <text x="20" y="42" font-family="Inter, Arial, sans-serif" font-size="18" fill="#334155">Alerts</text>
+      <text x="20" y="91" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#b45309">38</text>
+    </g>
+    <g transform="translate(382 145)">
+      <rect width="145" height="138" rx="14" fill="#ffffff" stroke="#dbe4e8"/>
+      <text x="20" y="42" font-family="Inter, Arial, sans-serif" font-size="18" fill="#334155">Done</text>
+      <text x="20" y="91" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#2563eb">81%</text>
+    </g>
+    <rect x="42" y="340" width="486" height="1" fill="#e2e8f0"/>
+    <text x="42" y="392" font-family="Inter, Arial, sans-serif" font-size="18" fill="#475569">local imports -> alerts -> tasks -> audit</text>
+  </g>
+  <g transform="translate(750 148)">
+    <text x="0" y="0" font-family="Inter, Arial, sans-serif" font-size="86" font-weight="900" fill="#ffffff">FoodOps</text>
+    <text x="0" y="94" font-family="Inter, Arial, sans-serif" font-size="86" font-weight="900" fill="#ffffff">Community</text>
+    <text x="0" y="162" font-family="Inter, Arial, sans-serif" font-size="30" fill="#d9fffb">Open-source local operations loop</text>
+    <text x="0" y="204" font-family="Inter, Arial, sans-serif" font-size="30" fill="#d9fffb">for food service teams</text>
+    <g transform="translate(0 272)">
+      <rect width="150" height="56" rx="28" fill="#ecfeff"/>
+      <text x="40" y="36" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#155e75">FastAPI</text>
+      <rect x="178" width="142" height="56" rx="28" fill="#ecfeff"/>
+      <text x="218" y="36" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#155e75">Next.js</text>
+      <rect x="348" width="178" height="56" rx="28" fill="#ecfeff"/>
+      <text x="385" y="36" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#155e75">PostgreSQL</text>
+    </g>
+    <g transform="translate(0 430)">
+      <circle cx="24" cy="24" r="24" fill="#99f6e4"/>
+      <circle cx="158" cy="24" r="24" fill="#bae6fd"/>
+      <circle cx="292" cy="24" r="24" fill="#fde68a"/>
+      <circle cx="426" cy="24" r="24" fill="#c7d2fe"/>
+      <path d="M52 24 H130 M186 24 H264 M320 24 H398" stroke="#e0f2fe" stroke-width="6" stroke-linecap="round"/>
+      <text x="0" y="80" font-family="Inter, Arial, sans-serif" font-size="18" fill="#e6fffb">Import</text>
+      <text x="128" y="80" font-family="Inter, Arial, sans-serif" font-size="18" fill="#e6fffb">Alert</text>
+      <text x="260" y="80" font-family="Inter, Arial, sans-serif" font-size="18" fill="#e6fffb">Task</text>
+      <text x="394" y="80" font-family="Inter, Arial, sans-serif" font-size="18" fill="#e6fffb">Audit</text>
+    </g>
+  </g>
+  <text x="92" y="805" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff">github.com/wangsalin/foodops</text>
+</svg>
