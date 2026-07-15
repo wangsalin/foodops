@@ -106,6 +106,10 @@ Community contributions should stay inside the included scope. Enterprise integr
 
 See [Roadmap](docs/ROADMAP.md) for the next community milestones.
 
+## Launch Materials
+
+Maintainers can use the [Marketing Kit](docs/marketing/README.md) for the first public launch and developer recruiting wave.
+
 ## Community
 
 - Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
