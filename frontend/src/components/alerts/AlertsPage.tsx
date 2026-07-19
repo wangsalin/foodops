@@ -287,7 +287,7 @@ export function AlertsPage() {
       setDispatchUsers(optionRes.data.users || []);
       setDispatchDepartments(optionRes.data.departments || []);
     } catch {
-      message.error("预警数据加载失败，请确认后端服务和登录状态");
+      message.error("预警数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -335,7 +335,7 @@ export function AlertsPage() {
       title: formatAlertText(currentAlert.title),
       assignee_id: currentAlert.responsible_user_id,
       priority: currentAlert.level === "critical" || currentAlert.level === "high" ? "high" : "normal",
-      note: currentAlert.summary ? `归因草稿：${formatAlertText(currentAlert.summary)}` : undefined
+      note: currentAlert.summary ? `归因草稿:${formatAlertText(currentAlert.summary)}` : undefined
     });
   }, [currentAlert, dispatchForm, dispatchOpen]);
 
@@ -370,7 +370,7 @@ export function AlertsPage() {
       if (res.data.h5_url) {
         setH5Open(true);
       }
-      message.success(res.data.h5_url ? "预警已派发，H5 链接已生成，等待负责人确认收到" : "预警已派发");
+      message.success(res.data.h5_url ? "预警已派发,H5 链接已生成,等待负责人确认收到" : "预警已派发");
       await load();
       if (detailOpen) {
         await openDetail(currentAlert);
@@ -387,8 +387,8 @@ export function AlertsPage() {
       <section className="flow-band">
         <div>
           <span className="flow-kicker">预警派发</span>
-          <div className="flow-title">从异常预警生成任务，并同步生成店长 H5 链接</div>
-          <div className="flow-text">运营确认预警后，可补充处理说明、优先级和截止时间，再派发给门店处理。</div>
+          <div className="flow-title">从异常预警生成任务,并同步生成店长 H5 链接</div>
+          <div className="flow-text">运营确认预警后,可补充处理说明、优先级和截止时间,再派发给门店处理。</div>
         </div>
         <Button icon={<ReloadOutlined />} onClick={load} loading={loading}>
           刷新
@@ -519,7 +519,7 @@ export function AlertsPage() {
 
       <Drawer
         className="task-detail-drawer alert-detail-drawer"
-        title={currentAlert ? `预警详情：${formatAlertText(currentAlert.title)}` : "预警详情"}
+        title={currentAlert ? `预警详情:${formatAlertText(currentAlert.title)}` : "预警详情"}
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
         width={720}
@@ -540,7 +540,7 @@ export function AlertsPage() {
               </div>
               <div className="task-detail-h5-hint">
                 <CheckCircleOutlined />
-                <span>先确认归因，再派发任务。店长 H5 反馈、通知和审计记录会回流到这里。</span>
+                <span>先确认归因,再派发任务。店长 H5 反馈、通知和审计记录会回流到这里。</span>
               </div>
             </div>
 
@@ -569,7 +569,7 @@ export function AlertsPage() {
                 <span>AI 归因摘要</span>
               </div>
               <div className="task-related-alert">
-                <p>{formatAlertText(currentAlert.summary) || "暂无归因摘要，等待数据导入或 AI 归因任务生成。"}</p>
+                <p>{formatAlertText(currentAlert.summary) || "暂无归因摘要,等待数据导入或 AI 归因任务生成。"}</p>
               </div>
             </div>
 
@@ -597,7 +597,7 @@ export function AlertsPage() {
                             <Tag color={item.status === "closed" ? "green" : item.status === "pending_review" ? "purple" : "blue"}>
                               {taskStatusLabel[item.status] || item.status}
                             </Tag>
-                            <Tag color={priorityColor(item.priority)}>优先级：{priorityLabel[item.priority] || item.priority}</Tag>
+                            <Tag color={priorityColor(item.priority)}>优先级:{priorityLabel[item.priority] || item.priority}</Tag>
                           </Space>
                         }
                         description={`${item.assignee_name || "待指派"} · ${item.department_name || "未设置部门"} · 截止 ${formatDateTime(item.due_at)}`}
@@ -606,7 +606,7 @@ export function AlertsPage() {
                   )}
                 />
               ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无关联任务，可从底部派发给负责人" />
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无关联任务,可从底部派发给负责人" />
               )}
             </div>
 
@@ -702,7 +702,7 @@ export function AlertsPage() {
       </Drawer>
 
       <Modal
-        title={currentAlert ? `派发任务：${formatAlertText(currentAlert.title)}` : "派发任务"}
+        title={currentAlert ? `派发任务:${formatAlertText(currentAlert.title)}` : "派发任务"}
         open={dispatchOpen}
         onCancel={() => setDispatchOpen(false)}
         footer={null}
@@ -711,7 +711,7 @@ export function AlertsPage() {
       >
         <Form form={dispatchForm} preserve={false} layout="vertical" onFinish={toTask}>
           <Form.Item name="title" label="任务标题" rules={[{ required: true, message: "请输入任务标题" }]}>
-            <Input placeholder="例如：复盘门店销售下滑原因" />
+            <Input placeholder="例如:复盘门店销售下滑原因" />
           </Form.Item>
           <div className="task-form-grid">
             <Form.Item name="assignee_id" label="责任人" rules={[{ required: true, message: "请选择责任人" }]}>
@@ -749,7 +749,7 @@ export function AlertsPage() {
             </Form.Item>
           </div>
           <Form.Item name="note" label="派单说明">
-            <Input.TextArea rows={4} placeholder="写给运营留档的处理说明；店长 H5 将展示任务标题、门店和预警归因。" />
+            <Input.TextArea rows={4} placeholder="写给运营留档的处理说明;店长 H5 将展示任务标题、门店和预警归因。" />
           </Form.Item>
           <Space>
             <Button type="primary" icon={<SendOutlined />} htmlType="submit" loading={Boolean(taskingId)}>
@@ -762,7 +762,7 @@ export function AlertsPage() {
 
       <Modal title="店长 H5 链接" open={h5Open} onCancel={() => setH5Open(false)} footer={null}>
         <Space direction="vertical" style={{ width: "100%" }}>
-          <Typography.Text type="secondary">任务已生成并等待负责人确认，确认收到并开始处理后即可提交反馈。</Typography.Text>
+          <Typography.Text type="secondary">任务已生成并等待负责人确认,确认收到并开始处理后即可提交反馈。</Typography.Text>
           <Input.TextArea value={h5Url} rows={3} readOnly />
           <Space>
             <Button

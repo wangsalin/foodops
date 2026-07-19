@@ -296,7 +296,7 @@ export function MaterialsPage() {
       setMaterials(materialRes.data);
       setSuppliers(supplierRes.data);
     } catch {
-      message.error("原料数据加载失败，请确认后端服务和登录状态");
+      message.error("原料数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -353,7 +353,7 @@ export function MaterialsPage() {
       const res = await api.get(`/api/v1/materials/${record.id}`);
       setPreview({ ...record, ...res.data });
     } catch {
-      message.error("原料详情加载失败，请稍后重试");
+      message.error("原料详情加载失败,请稍后重试");
     } finally {
       setDetailLoading(false);
     }
@@ -366,7 +366,7 @@ export function MaterialsPage() {
       const res = await api.get(`/api/v1/suppliers/${record.id}`);
       setSupplierPreview({ ...record, ...res.data });
     } catch {
-      message.error("供货商详情加载失败，请稍后重试");
+      message.error("供货商详情加载失败,请稍后重试");
     } finally {
       setSupplierDetailLoading(false);
     }
@@ -389,7 +389,7 @@ export function MaterialsPage() {
       setOpen(false);
       await load();
     } catch {
-      message.error("原料保存失败，请检查编码是否重复或字段是否完整");
+      message.error("原料保存失败,请检查编码是否重复或字段是否完整");
     } finally {
       setSaving(false);
     }
@@ -420,7 +420,7 @@ export function MaterialsPage() {
       setSupplierOpen(false);
       await load();
     } catch {
-      message.error("供货商保存失败，请检查编码是否重复或字段是否完整");
+      message.error("供货商保存失败,请检查编码是否重复或字段是否完整");
     } finally {
       setSupplierSaving(false);
     }
@@ -572,7 +572,7 @@ export function MaterialsPage() {
             ))}
           </div>
         ) : (
-          <Empty description="暂无供货商档案，请先新增供货商后再绑定原料" />
+          <Empty description="暂无供货商档案,请先新增供货商后再绑定原料" />
         )}
       </Card>
 
@@ -627,7 +627,7 @@ export function MaterialsPage() {
           dataSource={filteredMaterials}
           columns={columns}
           scroll={{ x: 1180 }}
-          locale={{ emptyText: <Empty description="暂无原料档案，请先新增原料或导入库存数据" /> }}
+          locale={{ emptyText: <Empty description="暂无原料档案,请先新增原料或导入库存数据" /> }}
         />
       </Card>
 
@@ -802,14 +802,14 @@ export function MaterialsPage() {
               </div>
               <p className="material-advice-text">
                 {materialRisk(preview).key === "critical"
-                  ? "已有门店最近库存为 0，应优先派发补货或核实库存盘点任务。"
+                  ? "已有门店最近库存为 0,应优先派发补货或核实库存盘点任务。"
                   : materialRisk(preview).key === "warning"
-                    ? "部分门店低于安全库存线，建议结合未来两日销量检查备料。"
+                    ? "部分门店低于安全库存线,建议结合未来两日销量检查备料。"
                     : materialRisk(preview).key === "unconfigured"
-                      ? "当前原料未设置安全库存线，库存预警无法准确触发。"
+                      ? "当前原料未设置安全库存线,库存预警无法准确触发。"
                       : materialRisk(preview).key === "no_data"
-                        ? "当前原料还没有库存快照，建议先通过数据导入补齐门店库存。"
-                      : "当前原料没有明显库存风险，继续保持库存快照导入即可。"}
+                        ? "当前原料还没有库存快照,建议先通过数据导入补齐门店库存。"
+                      : "当前原料没有明显库存风险,继续保持库存快照导入即可。"}
               </p>
             </section>
 
@@ -883,10 +883,10 @@ export function MaterialsPage() {
           <div className="material-form-section-title">基础信息</div>
           <div className="material-form-grid">
             <Form.Item name="material_code" label="原料编码" rules={[{ required: true, message: "请输入原料编码" }]}>
-              <Input placeholder="例如：MAT-TEA-001" />
+              <Input placeholder="例如:MAT-TEA-001" />
             </Form.Item>
             <Form.Item name="name" label="原料名称" rules={[{ required: true, message: "请输入原料名称" }]}>
-              <Input placeholder="例如：山茶茶底" />
+              <Input placeholder="例如:山茶茶底" />
             </Form.Item>
             <Form.Item name="category" label="原料分类" rules={[{ required: true, message: "请选择原料分类" }]}>
               <Select showSearch options={categoryOptions} placeholder="选择分类" />
@@ -898,10 +898,10 @@ export function MaterialsPage() {
               <Input placeholder="kg / L / 个 / 包 / 箱 / 瓶" />
             </Form.Item>
             <Form.Item name="spec" label="规格说明">
-              <Input placeholder="例如：1L/瓶、1kg/份" />
+              <Input placeholder="例如:1L/瓶、1kg/份" />
             </Form.Item>
             <Form.Item name="purchase_spec" label="采购规格">
-              <Input placeholder="例如：12瓶/箱、5kg/箱" />
+              <Input placeholder="例如:12瓶/箱、5kg/箱" />
             </Form.Item>
             <Form.Item name="safety_stock" label="安全库存线">
               <InputNumber min={0} precision={2} style={{ width: "100%" }} />
@@ -969,10 +969,10 @@ export function MaterialsPage() {
         >
           <div className="material-form-grid">
             <Form.Item name="supplier_code" label="供货商编码" rules={[{ required: true, message: "请输入供货商编码" }]}>
-              <Input placeholder="例如：SUP-FRUIT" />
+              <Input placeholder="例如:SUP-FRUIT" />
             </Form.Item>
             <Form.Item name="name" label="供货商名称" rules={[{ required: true, message: "请输入供货商名称" }]}>
-              <Input placeholder="例如：江浙鲜果供应" />
+              <Input placeholder="例如:江浙鲜果供应" />
             </Form.Item>
             <Form.Item name="status" label="状态">
               <Select options={statusOptions} />
@@ -984,12 +984,12 @@ export function MaterialsPage() {
               <Input placeholder="手机号或座机" />
             </Form.Item>
             <Form.Item name="delivery_scope" label="配送范围">
-              <Input placeholder="例如：华东区域 / 全部门店" />
+              <Input placeholder="例如:华东区域 / 全部门店" />
             </Form.Item>
             <Form.Item name="settlement_type" label="结算方式">
               <Select options={settlementOptions} />
             </Form.Item>
-            <Form.Item name="lead_time_days" label="到货周期（天）">
+            <Form.Item name="lead_time_days" label="到货周期(天)">
               <InputNumber min={0} precision={0} style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item name="min_order_amount" label="最小订购金额">

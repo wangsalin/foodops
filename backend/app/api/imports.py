@@ -34,12 +34,12 @@ TEMPLATES: dict[str, list[TemplateField]] = {
     "sales_daily": [
         ("日期", "biz_date", True, "2026-06-10", "YYYY-MM-DD"),
         ("门店编码", "store_code", True, "SZ001", "系统内已存在门店编码"),
-        ("门店名称", "store_name", False, "中山公园店", "辅助识别，不参与匹配"),
+        ("门店名称", "store_name", False, "中山公园店", "辅助识别,不参与匹配"),
         ("渠道", "channel", True, "meituan", "meituan / eleme / offline 等"),
-        ("实收营业额(元)", "revenue", True, "3580.50", "数字，不能为负"),
-        ("订单数", "orders", True, "156", "整数，不能为负"),
-        ("折扣金额(元)", "discount_amt", False, "320.00", "数字，默认 0"),
-        ("退款金额(元)", "refund_amt", False, "45.00", "数字，默认 0"),
+        ("实收营业额(元)", "revenue", True, "3580.50", "数字,不能为负"),
+        ("订单数", "orders", True, "156", "整数,不能为负"),
+        ("折扣金额(元)", "discount_amt", False, "320.00", "数字,默认 0"),
+        ("退款金额(元)", "refund_amt", False, "45.00", "数字,默认 0"),
         ("备注", "note", False, "设备故障停业3h", "可选"),
     ],
     "sales_product": [
@@ -47,8 +47,8 @@ TEMPLATES: dict[str, list[TemplateField]] = {
         ("门店编码", "store_code", True, "SZ001", "系统内已存在门店编码"),
         ("SKU编码", "sku", True, "MTC-001", "产品 SKU"),
         ("产品名称", "product_name", False, "杨枝甘露大杯", "辅助识别"),
-        ("销售数量(杯)", "qty", True, "88", "整数，不能为负"),
-        ("销售金额(元)", "revenue", True, "1496.00", "数字，不能为负"),
+        ("销售数量(杯)", "qty", True, "88", "整数,不能为负"),
+        ("销售金额(元)", "revenue", True, "1496.00", "数字,不能为负"),
     ],
     "inventory": [
         ("日期", "biz_date", True, "2026-06-10", "YYYY-MM-DD"),
@@ -56,17 +56,17 @@ TEMPLATES: dict[str, list[TemplateField]] = {
         ("原料编码", "material_code", True, "RM-MANGO-01", "原料主数据编码"),
         ("原料名称", "material_name", True, "新鲜芒果", "原料名称"),
         ("单位", "unit", True, "kg", "kg / g / L / 个 等"),
-        ("当日入库量", "inbound_qty", False, "5.00", "数字，默认 0"),
-        ("当日消耗量", "usage_qty", False, "3.20", "数字，默认 0"),
-        ("期末库存", "closing_stock", True, "12.50", "数字，不能为负"),
-        ("安全库存线", "safety_stock", False, "8.00", "数字，默认 0"),
+        ("当日入库量", "inbound_qty", False, "5.00", "数字,默认 0"),
+        ("当日消耗量", "usage_qty", False, "3.20", "数字,默认 0"),
+        ("期末库存", "closing_stock", True, "12.50", "数字,不能为负"),
+        ("安全库存线", "safety_stock", False, "8.00", "数字,默认 0"),
     ],
     "reviews": [
         ("评价时间", "created_at", True, "2026-06-10 14:23", "YYYY-MM-DD HH:mm"),
         ("门店编码", "store_code", True, "SZ001", "系统内已存在门店编码"),
         ("平台", "platform", True, "meituan", "meituan / eleme 等"),
         ("评分", "rating", True, "2.0", "0-5 数字"),
-        ("评价内容", "content", False, "芒果不新鲜，有酸味", "可选"),
+        ("评价内容", "content", False, "芒果不新鲜,有酸味", "可选"),
         ("是否已回复", "replied", False, "否", "是 / 否"),
     ],
 }
@@ -128,7 +128,7 @@ async def upload_import_file(
     if len(raw) > max_size:
         raise AppError(
             code="IMPORT_FILE_TOO_LARGE",
-            message=f"文件超过 {settings.max_upload_size_mb}MB，请拆分后再导入",
+            message=f"文件超过 {settings.max_upload_size_mb}MB,请拆分后再导入",
             status_code=400,
         )
 
@@ -440,7 +440,7 @@ def validate_preview_rows(
                 "row": 1,
                 "field": "header",
                 "code": "IMPORT_TEMPLATE_INVALID",
-                "message": f"缺少必填列：{', '.join(missing_required)}",
+                "message": f"缺少必填列:{', '.join(missing_required)}",
             }
         ]
     if not rows:
@@ -907,7 +907,7 @@ def ensure_store_exists(db: Session, tenant_id: str, user_id: str, data_scope: s
     if not store_id:
         raise AppError(
             code="STORE_NOT_FOUND",
-            message=f"门店编码不存在或无权限访问：{store_code}",
+            message=f"门店编码不存在或无权限访问:{store_code}",
             detail={"store_code": store_code},
         )
     return store_id
@@ -925,7 +925,7 @@ def ensure_product_exists(db: Session, tenant_id: str, sku: str) -> dict:
         {"tenant_id": tenant_id, "sku": sku},
     ).mappings().first()
     if not product:
-        raise AppError(code="PRODUCT_NOT_FOUND", message=f"SKU 不存在或未启用：{sku}", detail={"sku": sku})
+        raise AppError(code="PRODUCT_NOT_FOUND", message=f"SKU 不存在或未启用:{sku}", detail={"sku": sku})
     return dict(product)
 
 
@@ -970,7 +970,7 @@ def value_for(row: dict[str, str], mapping: dict[str, str], field: str, default:
 def required_value(row: dict[str, str], mapping: dict[str, str], field: str) -> str:
     value = value_for(row, mapping, field)
     if not value:
-        raise AppError(code="IMPORT_FIELD_REQUIRED", message=f"缺少必填字段：{field}", detail={"field": field})
+        raise AppError(code="IMPORT_FIELD_REQUIRED", message=f"缺少必填字段:{field}", detail={"field": field})
     return value
 
 
@@ -979,9 +979,9 @@ def decimal_value(row: dict[str, str], mapping: dict[str, str], field: str, defa
     try:
         value = Decimal(raw_value or default)
     except InvalidOperation as exc:
-        raise AppError(code="IMPORT_NUMBER_INVALID", message=f"数字格式不正确：{field}", detail={"field": field}) from exc
+        raise AppError(code="IMPORT_NUMBER_INVALID", message=f"数字格式不正确:{field}", detail={"field": field}) from exc
     if value < 0:
-        raise AppError(code="IMPORT_NUMBER_NEGATIVE", message=f"数字不能小于 0：{field}", detail={"field": field})
+        raise AppError(code="IMPORT_NUMBER_NEGATIVE", message=f"数字不能小于 0:{field}", detail={"field": field})
     return value
 
 
@@ -992,9 +992,9 @@ def optional_decimal_value(row: dict[str, str], mapping: dict[str, str], field: 
     try:
         value = Decimal(raw_value)
     except InvalidOperation as exc:
-        raise AppError(code="IMPORT_NUMBER_INVALID", message=f"数字格式不正确：{field}", detail={"field": field}) from exc
+        raise AppError(code="IMPORT_NUMBER_INVALID", message=f"数字格式不正确:{field}", detail={"field": field}) from exc
     if value < 0:
-        raise AppError(code="IMPORT_NUMBER_NEGATIVE", message=f"数字不能小于 0：{field}", detail={"field": field})
+        raise AppError(code="IMPORT_NUMBER_NEGATIVE", message=f"数字不能小于 0:{field}", detail={"field": field})
     return value
 
 
@@ -1003,9 +1003,9 @@ def integer_value(row: dict[str, str], mapping: dict[str, str], field: str) -> i
     try:
         value = int(raw_value)
     except ValueError as exc:
-        raise AppError(code="IMPORT_INTEGER_INVALID", message=f"整数格式不正确：{field}", detail={"field": field}) from exc
+        raise AppError(code="IMPORT_INTEGER_INVALID", message=f"整数格式不正确:{field}", detail={"field": field}) from exc
     if value < 0:
-        raise AppError(code="IMPORT_INTEGER_NEGATIVE", message=f"整数不能小于 0：{field}", detail={"field": field})
+        raise AppError(code="IMPORT_INTEGER_NEGATIVE", message=f"整数不能小于 0:{field}", detail={"field": field})
     return value
 
 
@@ -1034,7 +1034,7 @@ def boolean_value(row: dict[str, str], mapping: dict[str, str], field: str, defa
         return True
     if normalized in {"否", "false", "0", "no", "n", "未回复"}:
         return False
-    raise AppError(code="IMPORT_BOOLEAN_INVALID", message=f"布尔字段只能填写是/否：{field}", detail={"field": field})
+    raise AppError(code="IMPORT_BOOLEAN_INVALID", message=f"布尔字段只能填写是/否:{field}", detail={"field": field})
 
 
 def classify_review(rating: Decimal, content: str) -> tuple[str, str | None]:

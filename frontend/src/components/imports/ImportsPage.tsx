@@ -88,9 +88,9 @@ type GeneratedAlertDetail = {
 
 const importTypes: { value: ImportType; label: string; hint: string }[] = [
   { value: "sales_daily", label: "门店日销售汇总", hint: "导入后触发销售下滑预警扫描" },
-  { value: "sales_product", label: "产品日销售明细", hint: "先完成模板、预检、批次记录，后续接产品分析表" },
-  { value: "inventory", label: "库存盘点数据", hint: "先完成模板、预检、批次记录，后续接库存预警规则" },
-  { value: "reviews", label: "评价数据", hint: "先完成模板、预检、批次记录，后续接差评分类" }
+  { value: "sales_product", label: "产品日销售明细", hint: "先完成模板、预检、批次记录,后续接产品分析表" },
+  { value: "inventory", label: "库存盘点数据", hint: "先完成模板、预检、批次记录,后续接库存预警规则" },
+  { value: "reviews", label: "评价数据", hint: "先完成模板、预检、批次记录,后续接差评分类" }
 ];
 
 const statusText: Record<string, string> = {
@@ -137,7 +137,7 @@ const noApiImportGuide = [
     importType: "sales_daily" as ImportType,
     title: "门店日销售",
     sample: "docs/no-api-import-samples/sales_daily_day1.csv",
-    result: "生成经营日期，联动看板、销售预警和门店日报"
+    result: "生成经营日期,联动看板、销售预警和门店日报"
   },
   {
     step: 2,
@@ -151,7 +151,7 @@ const noApiImportGuide = [
     importType: "inventory" as ImportType,
     title: "库存快照",
     sample: "docs/no-api-import-samples/inventory_day1.csv",
-    result: "触发库存风险识别，进入库存看板"
+    result: "触发库存风险识别,进入库存看板"
   },
   {
     step: 4,
@@ -174,35 +174,35 @@ const importTypeOrderLabel: Record<ImportType, string> = {
 const importErrorAdvice: Record<string, { title: string; action: string }> = {
   IMPORT_TEMPLATE_INVALID: {
     title: "模板列不匹配",
-    action: "下载当前类型的系统模板，或把文件表头改成模板里的列名。"
+    action: "下载当前类型的系统模板,或把文件表头改成模板里的列名。"
   },
   IMPORT_EMPTY_FILE: {
     title: "文件没有数据",
-    action: "保留表头后至少填写 1 行数据，再重新上传预检。"
+    action: "保留表头后至少填写 1 行数据,再重新上传预检。"
   },
   STORE_NOT_FOUND: {
     title: "门店编码无法匹配",
-    action: "先到主数据 / 门店检查编码是否存在，并确认当前账号有该门店权限。"
+    action: "先到主数据 / 门店检查编码是否存在,并确认当前账号有该门店权限。"
   },
   PRODUCT_NOT_FOUND: {
     title: "SKU 不存在或未启用",
-    action: "先到主数据 / 商品维护对应 SKU，并确认商品状态为启用。"
+    action: "先到主数据 / 商品维护对应 SKU,并确认商品状态为启用。"
   },
   IMPORT_FIELD_REQUIRED: {
     title: "必填字段为空",
-    action: "检查对应列是否为空，尤其是日期、门店编码、SKU、数量、金额等必填列。"
+    action: "检查对应列是否为空,尤其是日期、门店编码、SKU、数量、金额等必填列。"
   },
   IMPORT_DATE_INVALID: {
     title: "日期格式错误",
-    action: "日期统一填写为 YYYY-MM-DD，例如 2026-06-26。"
+    action: "日期统一填写为 YYYY-MM-DD,例如 2026-06-26。"
   },
   IMPORT_DATETIME_INVALID: {
     title: "时间格式错误",
-    action: "评价时间统一填写为 YYYY-MM-DD HH:mm，例如 2026-06-26 14:30。"
+    action: "评价时间统一填写为 YYYY-MM-DD HH:mm,例如 2026-06-26 14:30。"
   },
   IMPORT_NUMBER_INVALID: {
     title: "数字格式错误",
-    action: "金额、库存、消耗量只保留数字和小数点，不要带元、kg、杯等单位。"
+    action: "金额、库存、消耗量只保留数字和小数点,不要带元、kg、杯等单位。"
   },
   IMPORT_NUMBER_NEGATIVE: {
     title: "数字不能为负",
@@ -210,7 +210,7 @@ const importErrorAdvice: Record<string, { title: string; action: string }> = {
   },
   IMPORT_INTEGER_INVALID: {
     title: "整数格式错误",
-    action: "订单数和销售数量必须是整数，不要填写小数或单位。"
+    action: "订单数和销售数量必须是整数,不要填写小数或单位。"
   },
   IMPORT_INTEGER_NEGATIVE: {
     title: "整数不能为负",
@@ -222,7 +222,7 @@ const importErrorAdvice: Record<string, { title: string; action: string }> = {
   },
   IMPORT_BOOLEAN_INVALID: {
     title: "是否字段格式错误",
-    action: "是否已回复只填写 是 / 否，也可使用 true / false。"
+    action: "是否已回复只填写 是 / 否,也可使用 true / false。"
   }
 };
 
@@ -260,7 +260,7 @@ export function ImportsPage() {
       const res = await api.get("/api/v1/imports/records");
       setRecords(res.data);
     } catch {
-      message.error("导入记录加载失败，请确认后端服务和登录状态");
+      message.error("导入记录加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -302,7 +302,7 @@ export function ImportsPage() {
     }
     window.localStorage.setItem(mappingStorageKey(importType), JSON.stringify(mapping));
     setCurrentMapping(mapping);
-    message.success("字段映射已保存，下次选择该导入类型会自动复用");
+    message.success("字段映射已保存,下次选择该导入类型会自动复用");
   }
 
   function clearSavedMapping() {
@@ -314,7 +314,7 @@ export function ImportsPage() {
 
   async function uploadPreview() {
     if (!canManageImports) {
-      message.warning("当前账号没有数据导入管理权限，不能上传预检");
+      message.warning("当前账号没有数据导入管理权限,不能上传预检");
       return;
     }
     const file = fileList[0]?.originFileObj;
@@ -338,12 +338,12 @@ export function ImportsPage() {
       if (res.data.missing_required?.length) {
         message.warning("预检发现缺少必填列");
       } else if (res.data.row_errors?.length) {
-        message.warning("预检发现错误行，可确认后跳过错误行");
+        message.warning("预检发现错误行,可确认后跳过错误行");
       } else {
-        message.success("预检通过，可以确认导入");
+        message.success("预检通过,可以确认导入");
       }
     } catch {
-      message.error("上传预检失败，请检查文件格式或登录状态");
+      message.error("上传预检失败,请检查文件格式或登录状态");
     } finally {
       setPreviewing(false);
     }
@@ -351,7 +351,7 @@ export function ImportsPage() {
 
   async function confirmImport() {
     if (!canManageImports) {
-      message.warning("当前账号没有数据导入管理权限，不能确认导入");
+      message.warning("当前账号没有数据导入管理权限,不能确认导入");
       return;
     }
     if (!preview) {
@@ -359,7 +359,7 @@ export function ImportsPage() {
       return;
     }
     if (preview.missing_required.length || preview.valid_rows === 0) {
-      message.warning("当前文件没有可导入的数据，请先修正模板列或数据行");
+      message.warning("当前文件没有可导入的数据,请先修正模板列或数据行");
       return;
     }
     setConfirming(true);
@@ -377,9 +377,9 @@ export function ImportsPage() {
       const generatedAlerts = Number(res.data.metadata?.generated_alerts || 0);
       message.success(
         generatedAlerts
-          ? `数据已导入，生成 ${generatedAlerts} 条预警`
+          ? `数据已导入,生成 ${generatedAlerts} 条预警`
           : preview.row_errors.length
-            ? "已导入可用数据，错误行已写入记录"
+            ? "已导入可用数据,错误行已写入记录"
             : "数据已导入并生成记录"
       );
       setPreview(null);
@@ -387,7 +387,7 @@ export function ImportsPage() {
       await loadRecords();
       await openRecordDetail(res.data);
     } catch {
-      message.error("确认导入失败，请检查数据内容、数据库服务或登录状态");
+      message.error("确认导入失败,请检查数据内容、数据库服务或登录状态");
     } finally {
       setConfirming(false);
     }
@@ -516,7 +516,7 @@ export function ImportsPage() {
         <div>
           <div className="flow-kicker">第二阶段数据导入</div>
           <div className="flow-title">模板下载、上传预检、错误行反馈、确认导入</div>
-          <div className="flow-text">销售日报确认后会写入经营数据并触发规则扫描；其他三类先完成 V1 导入批次与预检闭环。</div>
+          <div className="flow-text">销售日报确认后会写入经营数据并触发规则扫描;其他三类先完成 V1 导入批次与预检闭环。</div>
         </div>
         <Space wrap>
           <Button icon={<DownloadOutlined />} onClick={downloadTemplate}>
@@ -539,7 +539,7 @@ export function ImportsPage() {
           <div>
             <Typography.Text strong>推荐每天按 4 步导入</Typography.Text>
             <Typography.Paragraph type="secondary">
-              当前没有 POS / 外卖平台 API 时，使用本地文件完成 3 天试点验收。先确认门店、商品、原料主数据编码存在，再上传真实经营文件。
+              当前没有 POS / 外卖平台 API 时,使用本地文件完成 3 天试点验收。先确认门店、商品、原料主数据编码存在,再上传真实经营文件。
             </Typography.Paragraph>
           </div>
           <div className="no-api-guide-doc">
@@ -629,18 +629,18 @@ export function ImportsPage() {
                 <Alert
                   type="error"
                   showIcon
-                  message={`缺少必填列：${preview.missing_required.join("、")}`}
+                  message={`缺少必填列:${preview.missing_required.join("、")}`}
                   description={<ImportErrorAdvicePanel errors={preview.row_errors} missingRequired={preview.missing_required} />}
                 />
               ) : preview.row_errors.length ? (
                 <Alert
                   type="warning"
                   showIcon
-                  message={`发现 ${preview.row_errors.length} 条错误行，确认导入时会跳过错误行并写入错误记录。`}
+                  message={`发现 ${preview.row_errors.length} 条错误行,确认导入时会跳过错误行并写入错误记录。`}
                   description={<ImportErrorAdvicePanel errors={preview.row_errors} />}
                 />
               ) : (
-                <Alert type="success" showIcon message="预检通过，字段和数据格式可导入。" />
+                <Alert type="success" showIcon message="预检通过,字段和数据格式可导入。" />
               )}
 
               <Table size="small" pagination={false} rowKey="field" dataSource={preview.expected_fields} columns={fieldColumns} />
@@ -649,7 +649,7 @@ export function ImportsPage() {
             <div className="import-empty">
               <ExclamationCircleOutlined />
               <div>
-                <b>先下载模板，再上传 CSV 或 XLSX 文件</b>
+                <b>先下载模板,再上传 CSV 或 XLSX 文件</b>
                 <span>系统会检查必填列、日期、数字、门店编码和错误行。</span>
               </div>
             </div>
@@ -723,12 +723,12 @@ export function ImportsPage() {
                 </Space>
                 <Typography.Title level={4}>{formatImportFileName(recordDetail.file_url)}</Typography.Title>
                 <Typography.Paragraph type="secondary">
-                  导入时间 {formatDateTime(recordDetail.created_at)}，字段映射和错误行会保留在审计链路中。
+                  导入时间 {formatDateTime(recordDetail.created_at)},字段映射和错误行会保留在审计链路中。
                 </Typography.Paragraph>
               </div>
               <div className="task-detail-h5-hint">
                 <HistoryOutlined />
-                <span>确认导入后，销售、库存和评价数据会立即参与 V1 预警规则扫描。</span>
+                <span>确认导入后,销售、库存和评价数据会立即参与 V1 预警规则扫描。</span>
               </div>
             </div>
 
@@ -801,7 +801,7 @@ export function ImportsPage() {
                   <ExclamationCircleOutlined />
                   <div>
                     <b>本批次没有生成预警</b>
-                    <span>数据已入库，可继续在经营看板、门店分析或产品分析中查看经营结果。</span>
+                    <span>数据已入库,可继续在经营看板、门店分析或产品分析中查看经营结果。</span>
                   </div>
                 </div>
               )}
@@ -814,7 +814,7 @@ export function ImportsPage() {
                   <span>错误行处理</span>
                 </div>
                 <div className="import-error-action">
-                  <span>有 {recordDetail.error_count} 条数据未入库，建议下载后修正，再重新导入同一模板。</span>
+                  <span>有 {recordDetail.error_count} 条数据未入库,建议下载后修正,再重新导入同一模板。</span>
                   <Space wrap>
                     <Button onClick={() => openRecordErrors(recordDetail)}>查看错误</Button>
                     <Button icon={<DownloadOutlined />} onClick={() => downloadRecordErrors(recordDetail)}>下载错误明细</Button>
@@ -894,7 +894,7 @@ function errorAdviceGroups(errors: RowError[], missingRequired: string[] = []) {
     counts.set("IMPORT_TEMPLATE_INVALID", Math.max(counts.get("IMPORT_TEMPLATE_INVALID") || 0, missingRequired.length));
   }
   return Array.from(counts.entries()).map(([code, count]) => {
-    const advice = importErrorAdvice[code] || { title: code, action: "下载错误明细，按行检查后重新上传预检。" };
+    const advice = importErrorAdvice[code] || { title: code, action: "下载错误明细,按行检查后重新上传预检。" };
     return {
       code,
       count,
@@ -905,7 +905,7 @@ function errorAdviceGroups(errors: RowError[], missingRequired: string[] = []) {
 }
 
 function importErrorHelp(error: RowError) {
-  return importErrorAdvice[error.code] || { title: error.code, action: "下载错误明细，按行检查后重新上传预检。" };
+  return importErrorAdvice[error.code] || { title: error.code, action: "下载错误明细,按行检查后重新上传预检。" };
 }
 
 function mappingStorageKey(importType: ImportType) {

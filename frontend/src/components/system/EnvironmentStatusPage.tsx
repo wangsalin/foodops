@@ -109,7 +109,7 @@ export function EnvironmentStatusPage() {
       </div>
 
       {data?.warnings?.length ? (
-        <Alert type="warning" showIcon message="配置提醒" description={data.warnings.join("；")} />
+        <Alert type="warning" showIcon message="配置提醒" description={data.warnings.join(";")} />
       ) : null}
 
       <Card title="应用">

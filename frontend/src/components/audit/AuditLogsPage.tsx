@@ -233,7 +233,7 @@ export function AuditLogsPage() {
       setSummary(res.data.summary);
       setTotal(res.data.total);
     } catch {
-      message.error("审计日志加载失败，请确认权限和后端服务状态");
+      message.error("审计日志加载失败,请确认权限和后端服务状态");
     } finally {
       setLoading(false);
     }

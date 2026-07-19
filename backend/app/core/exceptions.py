@@ -29,6 +29,6 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def handle_unexpected_error(_: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=500,
-            content=ErrorResponse(code="INTERNAL_ERROR", message="系统异常，请稍后重试", detail=str(exc)).model_dump(),
+            content=ErrorResponse(code="INTERNAL_ERROR", message="系统异常,请稍后重试", detail=str(exc)).model_dump(),
         )
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -39,13 +39,13 @@ type DraftFeedback = {
 };
 
 const statusLabel: Record<string, string> = {
-  pending_confirm: "å¾…ç¡®è®¤",
-  confirmed: "å·²ç¡®è®¤",
-  processing: "å¤„ç†ä¸­",
-  pending_review: "å¾…å®¡æ ¸",
-  closed: "å·²å…³é—­",
-  archived: "å·²å½’æ¡£",
-  overdue: "å·²é€¾æœŸ"
+  pending_confirm: "待确认",
+  confirmed: "已确认",
+  processing: "处理中",
+  pending_review: "待审核",
+  closed: "已关闭",
+  archived: "已归档",
+  overdue: "已逾期"
 };
 
 const maxImageBytes = 5 * 1024 * 1024;
@@ -76,7 +76,7 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
         setDraftSavedAt(updatedAt);
         setSubmitAttempts(attempts);
       } catch {
-        setNotice("æœ¬æœºå­˜å‚¨ç©ºé—´ä¸è¶³ï¼Œè‰ç¨¿æš‚å­˜å¤±è´¥ã€‚è¯·å…ˆä¿ç•™æ–‡å­—å†…å®¹ï¼Œç½‘ç»œæ¢å¤åŽå°½å¿«æäº¤ã€‚");
+        setNotice("本机存储空间不足,草稿暂存失败。请先保留文字内容,网络恢复后尽快提交。");
       }
     },
     [draftKey, submitAttempts]
@@ -105,7 +105,7 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
       setDraftSavedAt(draft?.updatedAt || "");
       setSubmitAttempts(draft?.submitAttempts || 0);
     } catch {
-      setNotice("ä»»åŠ¡é“¾æŽ¥æ— æ•ˆæˆ–å·²è¿‡æœŸï¼Œè¯·è”ç³»æ€»éƒ¨è¿è¥é‡æ–°å‘é€ã€‚");
+      setNotice("任务链接无效或已过期,请联系总部运营重新发送。");
     } finally {
       setLoading(false);
     }
@@ -121,14 +121,14 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
       if (rawDraft) {
         const draft = parseDraft(rawDraft);
         if (draft?.pending) {
-          setNotice("ç½‘ç»œå·²æ¢å¤ï¼Œå¯ç»§ç»­æäº¤æš‚å­˜åé¦ˆã€‚");
+          setNotice("网络已恢复,可继续提交暂存反馈。");
         }
       }
     }
 
     function handleOffline() {
       setOnline(false);
-      setNotice("å½“å‰ç¦»çº¿ï¼Œåé¦ˆä¼šå…ˆæš‚å­˜åˆ°æœ¬æœºã€‚");
+      setNotice("当前离线,反馈会先暂存到本机。");
     }
 
     window.addEventListener("online", handleOnline);
@@ -152,9 +152,9 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
     try {
       const res = await api.post<RelayResponse>(`/api/v1/relay/tasks/${params.token}/confirm`);
       setData(res.data);
-      setNotice("å·²ç¡®è®¤æ”¶åˆ°ä»»åŠ¡ã€‚");
+      setNotice("已确认收到任务。");
     } catch {
-      setNotice("ç¡®è®¤å¤±è´¥ï¼Œè¯·ç¨åŽé‡è¯•æˆ–è”ç³»æ€»éƒ¨è¿è¥ã€‚");
+      setNotice("确认失败,请稍后重试或联系总部运营。");
     } finally {
       setSubmitting(false);
     }
@@ -165,9 +165,9 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
     try {
       const res = await api.post<RelayResponse>(`/api/v1/relay/tasks/${params.token}/start`);
       setData(res.data);
-      setNotice("ä»»åŠ¡å·²è¿›å…¥å¤„ç†ä¸­ï¼Œè¯·å®Œæˆå¤„ç†åŽæäº¤åé¦ˆã€‚");
+      setNotice("任务已进入处理中,请完成处理后提交反馈。");
     } catch {
-      setNotice("å¼€å§‹å¤„ç†å¤±è´¥ï¼Œè¯·ç¨åŽé‡è¯•æˆ–è”ç³»æ€»éƒ¨è¿è¥ã€‚");
+      setNotice("开始处理失败,请稍后重试或联系总部运营。");
     } finally {
       setSubmitting(false);
     }
@@ -175,17 +175,17 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
 
   const submit = useCallback(async () => {
     if (task?.status !== "processing") {
-      setNotice("è¯·å…ˆç¡®è®¤æ”¶åˆ°å¹¶å¼€å§‹å¤„ç†ä»»åŠ¡ï¼Œå†æäº¤åé¦ˆã€‚");
+      setNotice("请先确认收到并开始处理任务,再提交反馈。");
       return;
     }
     const trimmed = result.trim();
     if (!trimmed) {
-      setNotice("è¯·è¾“å…¥å¤„ç†ç»“æžœã€‚");
+      setNotice("请输入处理结果。");
       return;
     }
     if (!navigator.onLine) {
       saveDraft(trimmed, imageUrls, true, submitAttempts);
-      setNotice("å½“å‰ç¦»çº¿ï¼Œåé¦ˆå·²æš‚å­˜ï¼Œç½‘ç»œæ¢å¤åŽå¯ç»§ç»­æäº¤ã€‚");
+      setNotice("当前离线,反馈已暂存,网络恢复后可继续提交。");
       return;
     }
 
@@ -197,11 +197,11 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
       });
       setData(res.data);
       clearDraft();
-      setNotice("åé¦ˆå·²æäº¤ï¼Œç­‰å¾…æ€»éƒ¨å®¡æ ¸ã€‚");
+      setNotice("反馈已提交,等待总部审核。");
     } catch (error) {
       const nextAttempts = submitAttempts + 1;
       saveDraft(trimmed, imageUrls, true, nextAttempts);
-      setNotice(`${requestErrorMessage(error, "æäº¤å¤±è´¥")}ã€‚åé¦ˆå·²æš‚å­˜åˆ°æœ¬æœºï¼Œå¯ç¨åŽé‡è¯•ã€‚`);
+      setNotice(`${requestErrorMessage(error, "提交失败")}。反馈已暂存到本机,可稍后重试。`);
     } finally {
       setSubmitting(false);
     }
@@ -213,7 +213,7 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
     if (!files.length || !canEditFeedback) return;
     setUploadFailures([]);
     if (!navigator.onLine) {
-      setNotice("å½“å‰ç¦»çº¿ï¼Œå›¾ç‰‡éœ€è”ç½‘åŽä¸Šä¼ ã€‚æ–‡å­—åé¦ˆå·²æš‚å­˜ã€‚");
+      setNotice("当前离线,图片需联网后上传。文字反馈已暂存。");
       saveDraft(result, imageUrls, draftPending);
       return;
     }
@@ -226,7 +226,7 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
         try {
           const compressed = await compressImage(file);
           if (compressed.size > maxImageBytes) {
-            failures.push(`${file.name || "å›¾ç‰‡"} åŽ‹ç¼©åŽä»è¶…è¿‡ 5MB`);
+            failures.push(`${file.name || "图片"} 压缩后仍超过 5MB`);
             continue;
           }
 
@@ -241,16 +241,16 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
             return next;
           });
         } catch (error) {
-          failures.push(`${file.name || "å›¾ç‰‡"}ï¼š${requestErrorMessage(error, "ä¸Šä¼ å¤±è´¥")}`);
+          failures.push(`${file.name || "图片"}:${requestErrorMessage(error, "上传失败")}`);
         }
       }
       setUploadFailures(failures);
       if (failures.length && uploaded) {
-        setNotice(`å·²ä¸Šä¼  ${uploaded} å¼ ï¼Œ${failures.length} å¼ å¤±è´¥ã€‚å¤±è´¥å›¾ç‰‡è¯·é‡æ–°é€‰æ‹©ä¸Šä¼ ã€‚`);
+        setNotice(`已上传 ${uploaded} 张,${failures.length} 张失败。失败图片请重新选择上传。`);
       } else if (failures.length) {
-        setNotice("å›¾ç‰‡ä¸Šä¼ å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç½‘ç»œåŽé‡æ–°é€‰æ‹©å›¾ç‰‡ã€‚");
+        setNotice("图片上传失败,请检查网络后重新选择图片。");
       } else if (uploaded) {
-        setNotice(`å·²ä¸Šä¼  ${uploaded} å¼ å›¾ç‰‡ã€‚`);
+        setNotice(`已上传 ${uploaded} 张图片。`);
       }
     } finally {
       setUploading(false);
@@ -269,47 +269,47 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
     <main className="h5-shell">
       <section className="h5-mobile-header">
         <div className="h5-brand-row">
-          <span className="h5-brand-dot">{brand.brandShortName.slice(0, 1) || "å±±"}</span>
+          <span className="h5-brand-dot">{brand.brandShortName.slice(0, 1) || "山"}</span>
           <span>{brand.brandShortName} {brand.systemName}</span>
         </div>
-        <h1>åº—é•¿ä»»åŠ¡åé¦ˆ</h1>
-        <p>å¤„ç†å®ŒæˆåŽæäº¤ç»“æžœï¼Œæ€»éƒ¨è¿è¥ä¼šè¿›å…¥å®¡æ ¸ã€‚</p>
+        <h1>店长任务反馈</h1>
+        <p>处理完成后提交结果,总部运营会进入审核。</p>
       </section>
 
-      {!online && <div className="h5-status-banner">å½“å‰ç¦»çº¿ï¼Œæ–‡å­—åé¦ˆä¼šæš‚å­˜åˆ°æœ¬æœº</div>}
+      {!online && <div className="h5-status-banner">当前离线,文字反馈会暂存到本机</div>}
       {notice && <div className="h5-status-banner">{notice}</div>}
       {draftSavedAt && canEditFeedback && (
         <div className={`h5-status-banner ${draftPending ? "pending" : "saved"}`}>
           {draftPending
-            ? `æœ‰æœªæäº¤è‰ç¨¿ï¼Œæœ€è¿‘ä¿å­˜ ${formatDraftTime(draftSavedAt)}${submitAttempts ? `ï¼Œå·²é‡è¯• ${submitAttempts} æ¬¡` : ""}`
-            : `è‰ç¨¿å·²ä¿å­˜ ${formatDraftTime(draftSavedAt)}`}
+            ? `有未提交草稿,最近保存 ${formatDraftTime(draftSavedAt)}${submitAttempts ? `,已重试 ${submitAttempts} 次` : ""}`
+            : `草稿已保存 ${formatDraftTime(draftSavedAt)}`}
         </div>
       )}
 
       {loading ? (
-        <div className="h5-native-card h5-loader">åŠ è½½ä»»åŠ¡ä¸­...</div>
+        <div className="h5-native-card h5-loader">加载任务中...</div>
       ) : task ? (
         <div className="h5-stack">
           <section className="h5-native-card">
             <div className="h5-task-top">
               <div>
-                <span className="h5-kicker">é—¨åº—ä»»åŠ¡</span>
+                <span className="h5-kicker">门店任务</span>
                 <h2>{task.title}</h2>
-                <p>{task.store_name || "æœªå…³è”é—¨åº—"} Â· {task.store_region || "æœªè®¾ç½®åŒºåŸŸ"}</p>
+                <p>{task.store_name || "未关联门店"} · {task.store_region || "未设置区域"}</p>
               </div>
-              <span className={`h5-pill ${task.priority === "high" ? "danger" : ""}`}>{task.priority === "high" ? "é«˜ä¼˜å…ˆçº§" : "æ™®é€š"}</span>
+              <span className={`h5-pill ${task.priority === "high" ? "danger" : ""}`}>{task.priority === "high" ? "高优先级" : "普通"}</span>
             </div>
 
             <div className="h5-meta-grid native">
-              <div><span>çŠ¶æ€</span><b>{statusLabel[task.status] || task.status}</b></div>
-              <div><span>è´Ÿè´£äºº</span><b>{task.assignee_name || "å¾…æŒ‡æ´¾"}</b></div>
-              <div><span>æˆªæ­¢</span><b>{formatDate(task.due_at) || "æœªè®¾ç½®"}</b></div>
-              <div><span>åˆ›å»º</span><b>{formatDate(task.created_at)}</b></div>
+              <div><span>状态</span><b>{statusLabel[task.status] || task.status}</b></div>
+              <div><span>负责人</span><b>{task.assignee_name || "待指派"}</b></div>
+              <div><span>截止</span><b>{formatDate(task.due_at) || "未设置"}</b></div>
+              <div><span>创建</span><b>{formatDate(task.created_at)}</b></div>
             </div>
 
             {task.alert_summary && (
               <div className="h5-alert">
-                <span>å¼‚å¸¸è¯´æ˜Ž</span>
+                <span>异常说明</span>
                 <p>{task.alert_summary}</p>
               </div>
             )}
@@ -317,26 +317,26 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
 
           <section className="h5-native-card">
             <div className="h5-section-head">
-              <h2>å¤„ç†åé¦ˆ</h2>
-              {locked && <span className="h5-pill">å·²æäº¤</span>}
-              {task.status === "pending_confirm" && <span className="h5-pill">å¾…ç¡®è®¤</span>}
-              {task.status === "confirmed" && <span className="h5-pill">å·²ç¡®è®¤</span>}
+              <h2>处理反馈</h2>
+              {locked && <span className="h5-pill">已提交</span>}
+              {task.status === "pending_confirm" && <span className="h5-pill">待确认</span>}
+              {task.status === "confirmed" && <span className="h5-pill">已确认</span>}
             </div>
             {isReturnedForRework && (
               <div className="h5-review-note">
-                <span>æ€»éƒ¨é©³å›žåŽŸå› </span>
+                <span>总部驳回原因</span>
                 <p>{reviewResult.reviewNote}</p>
               </div>
             )}
             {isReturnedForRework && reviewResult.feedback && (
               <div className="h5-previous-feedback">
-                <span>ä¸Šæ¬¡æäº¤å†…å®¹</span>
+                <span>上次提交内容</span>
                 <p>{reviewResult.feedback}</p>
                 {task.feedback_img_urls?.length ? (
                   <div className="h5-image-grid previous">
                     {task.feedback_img_urls.map((url) => (
                       <div className="h5-image-item" key={url}>
-                        <img src={assetUrl(url)} alt="ä¸Šæ¬¡åé¦ˆå›¾ç‰‡" />
+                        <img src={assetUrl(url)} alt="上次反馈图片" />
                       </div>
                     ))}
                   </div>
@@ -345,19 +345,19 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
             )}
             {task.status === "pending_confirm" && (
               <div className="h5-alert">
-                <span>{isReturnedForRework ? "é‡æ–°æ•´æ”¹" : "ä¸‹ä¸€æ­¥"}</span>
-                <p>{isReturnedForRework ? "è¯·å…ˆç¡®è®¤æ”¶åˆ°é©³å›žæ„è§ï¼Œå†å¼€å§‹è¡¥å……æ•´æ”¹ã€‚æ€»éƒ¨ä¼šçœ‹åˆ°æœ¬æ¬¡ä»»åŠ¡å·²é‡æ–°æŽ¥æ”¶ã€‚" : "è¯·å…ˆç¡®è®¤æ”¶åˆ°ä»»åŠ¡ï¼Œæ€»éƒ¨ä¼šçœ‹åˆ°ä»»åŠ¡å·²è¢«æŽ¥æ”¶ã€‚"}</p>
+                <span>{isReturnedForRework ? "重新整改" : "下一步"}</span>
+                <p>{isReturnedForRework ? "请先确认收到驳回意见,再开始补充整改。总部会看到本次任务已重新接收。" : "请先确认收到任务,总部会看到任务已被接收。"}</p>
                 <button className="h5-submit" type="button" disabled={submitting} onClick={confirmTask}>
-                  {submitting ? "ç¡®è®¤ä¸­..." : isReturnedForRework ? "ç¡®è®¤æ”¶åˆ°é©³å›žæ„è§" : "ç¡®è®¤æ”¶åˆ°"}
+                  {submitting ? "确认中..." : isReturnedForRework ? "确认收到驳回意见" : "确认收到"}
                 </button>
               </div>
             )}
             {task.status === "confirmed" && (
               <div className="h5-alert">
-                <span>{isReturnedForRework ? "è¡¥å……å¤„ç†" : "ä¸‹ä¸€æ­¥"}</span>
-                <p>{isReturnedForRework ? "å¼€å§‹å¤„ç†åŽï¼Œè¯·å¡«å†™æœ¬æ¬¡è¡¥å……æ•´æ”¹ç»“æžœå¹¶ä¸Šä¼ æ–°çš„å‡­è¯å›¾ç‰‡ã€‚" : "å¼€å§‹å¤„ç†åŽå³å¯å¡«å†™å¤„ç†ç»“æžœå¹¶æäº¤æ€»éƒ¨å®¡æ ¸ã€‚"}</p>
+                <span>{isReturnedForRework ? "补充处理" : "下一步"}</span>
+                <p>{isReturnedForRework ? "开始处理后,请填写本次补充整改结果并上传新的凭证图片。" : "开始处理后即可填写处理结果并提交总部审核。"}</p>
                 <button className="h5-submit" type="button" disabled={submitting} onClick={startProcessing}>
-                  {submitting ? "å¤„ç†ä¸­..." : isReturnedForRework ? "å¼€å§‹è¡¥å……æ•´æ”¹" : "å¼€å§‹å¤„ç†"}
+                  {submitting ? "处理中..." : isReturnedForRework ? "开始补充整改" : "开始处理"}
                 </button>
               </div>
             )}
@@ -365,7 +365,7 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
               value={result}
               disabled={!canEditFeedback}
               rows={7}
-              placeholder={isReturnedForRework ? "è¯·å¡«å†™æœ¬æ¬¡è¡¥å……æ•´æ”¹ç»“æžœï¼Œä¾‹å¦‚ï¼šå·²æŒ‰æ€»éƒ¨æ„è§é‡æ–°æ‹æ‘„æ•´æ”¹ç…§ç‰‡ï¼Œå¹¶è¡¥å……æ™šé«˜å³°æŽ’ç­å¤ç›˜ã€‚" : "ä¾‹å¦‚ï¼šå·²æ ¸æŸ¥å¤–å–æ´»åŠ¨é…ç½®ï¼Œæ™šé«˜å³°å¢žåŠ  1 åæŽ’ç­ï¼Œå¹¶å®Œæˆé—¨åº—å¤ç›˜ã€‚"}
+              placeholder={isReturnedForRework ? "请填写本次补充整改结果,例如:已按总部意见重新拍摄整改照片,并补充晚高峰排班复盘。" : "例如:已核查外卖活动配置,晚高峰增加 1 名排班,并完成门店复盘。"}
               onChange={(event) => {
                 setResult(event.target.value);
                 saveDraft(event.target.value, imageUrls, draftPending);
@@ -374,17 +374,17 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
 
             <div className="h5-upload-row">
               <label className={`h5-upload-button ${!canEditFeedback || uploading ? "disabled" : ""}`}>
-                {uploading ? "ä¸Šä¼ ä¸­..." : "æ·»åŠ å›¾ç‰‡"}
+                {uploading ? "上传中..." : "添加图片"}
                 <input type="file" accept="image/png,image/jpeg,image/webp" multiple disabled={!canEditFeedback || uploading} onChange={handleImageChange} />
               </label>
-              <span>{imageUrls.length}/6 Â· å•å¼ åŽ‹ç¼©åŽä¸è¶…è¿‡ 5MB</span>
+              <span>{imageUrls.length}/6 · 单张压缩后不超过 5MB</span>
             </div>
 
             {uploadFailures.length > 0 && (
               <div className="h5-upload-failures">
-                <b>ä¸Šä¼ å¤±è´¥</b>
+                <b>上传失败</b>
                 {uploadFailures.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
-                {uploadFailures.length > 3 ? <span>è¿˜æœ‰ {uploadFailures.length - 3} å¼ å¤±è´¥ï¼Œè¯·é‡æ–°é€‰æ‹©ä¸Šä¼ ã€‚</span> : null}
+                {uploadFailures.length > 3 ? <span>还有 {uploadFailures.length - 3} 张失败,请重新选择上传。</span> : null}
               </div>
             )}
 
@@ -392,8 +392,8 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
               <div className="h5-image-grid">
                 {imageUrls.map((url) => (
                   <div className="h5-image-item" key={url}>
-                    <img src={assetUrl(url)} alt="åé¦ˆå›¾ç‰‡" />
-                    {canEditFeedback && <button type="button" onClick={() => removeImage(url)}>åˆ é™¤</button>}
+                    <img src={assetUrl(url)} alt="反馈图片" />
+                    {canEditFeedback && <button type="button" onClick={() => removeImage(url)}>删除</button>}
                   </div>
                 ))}
               </div>
@@ -401,23 +401,23 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
 
             <button className="h5-submit" type="button" disabled={!canEditFeedback || submitting} onClick={submit}>
               {locked
-                ? "åé¦ˆå·²æäº¤"
+                ? "反馈已提交"
                 : task.status !== "processing"
-                  ? "è¯·å…ˆç¡®è®¤å¹¶å¼€å§‹å¤„ç†"
+                  ? "请先确认并开始处理"
                   : submitting
-                    ? "æäº¤ä¸­..."
+                    ? "提交中..."
                     : draftPending
-                      ? "ç»§ç»­æäº¤æš‚å­˜åé¦ˆ"
+                      ? "继续提交暂存反馈"
                       : isReturnedForRework
-                        ? "æäº¤è¡¥å……æ•´æ”¹"
-                        : "æäº¤åé¦ˆ"}
+                        ? "提交补充整改"
+                        : "提交反馈"}
             </button>
           </section>
         </div>
       ) : (
         <section className="h5-native-card">
-          <h2>ä»»åŠ¡ä¸å¯è®¿é—®</h2>
-          <p>é“¾æŽ¥æ— æ•ˆã€å·²è¿‡æœŸæˆ–ä»»åŠ¡å·²å…³é—­ï¼Œè¯·è”ç³»æ€»éƒ¨è¿è¥ã€‚</p>
+          <h2>任务不可访问</h2>
+          <p>链接无效、已过期或任务已关闭,请联系总部运营。</p>
         </section>
       )}
     </main>
@@ -425,10 +425,10 @@ export default function H5TaskPage({ params }: { params: { token: string } }) {
 }
 
 function splitReviewResult(result?: string) {
-  const [feedback, ...reviewParts] = String(result || "").split(/\n\nå®¡æ ¸æ„è§ï¼š/);
+  const [feedback, ...reviewParts] = String(result || "").split(/\n\n审核意见:/);
   return {
     feedback: feedback.trim(),
-    reviewNote: reviewParts.join("\n\nå®¡æ ¸æ„è§ï¼š").trim()
+    reviewNote: reviewParts.join("\n\n审核意见:").trim()
   };
 }
 
@@ -464,8 +464,8 @@ function requestErrorMessage(error: unknown, fallback: string) {
     if (typeof data?.detail === "string") return data.detail;
   }
   if (error instanceof Error && error.message) {
-    if (error.message.includes("timeout")) return "ç½‘ç»œè¶…æ—¶";
-    if (error.message.includes("Network")) return "ç½‘ç»œè¿žæŽ¥å¼‚å¸¸";
+    if (error.message.includes("timeout")) return "网络超时";
+    if (error.message.includes("Network")) return "网络连接异常";
   }
   return fallback;
 }
@@ -531,4 +531,3 @@ function loadImage(file: File): Promise<HTMLImageElement> {
     image.src = url;
   });
 }
-

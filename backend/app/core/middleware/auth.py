@@ -52,7 +52,7 @@ def load_current_auth_context(claims: dict) -> dict:
     user_id = claims.get("sub")
     token_tenant_id = claims.get("tenant_id")
     if not user_id or not token_tenant_id:
-        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效，请重新登录", status_code=401)
+        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效,请重新登录", status_code=401)
     with SessionLocal() as db:
         user = db.execute(
             text(
@@ -67,7 +67,7 @@ def load_current_auth_context(claims: dict) -> dict:
             {"user_id": user_id},
         ).mappings().first()
     if not user or user["status"] != "active" or str(user["tenant_id"]) != str(token_tenant_id):
-        raise AppError(code="AUTH_USER_DISABLED", message="账号不可用，请联系管理员", status_code=401)
+        raise AppError(code="AUTH_USER_DISABLED", message="账号不可用,请联系管理员", status_code=401)
     permissions = user["permissions"] or {}
     return {
         "user_id": str(user["id"]),

@@ -1400,21 +1400,21 @@ def latest_screen_ai_summary(db: Session, tenant_id: str) -> str | None:
 
 def build_screen_summary(overview: dict, risk_stores: list[dict], tasks: dict) -> str:
     if overview["revenue"] <= 0 and overview["orders"] <= 0:
-        return "暂无可展示的交易数据，请先完成门店日销售、产品销售、库存或评价数据导入。"
+        return "暂无可展示的交易数据,请先完成门店日销售、产品销售、库存或评价数据导入。"
     focus_store = risk_stores[0]["name"] if risk_stores else "暂无高风险门店"
     return (
-        f"最新营业日营收 {overview['revenue']:.2f} 元，订单 {overview['orders']} 笔，"
+        f"最新营业日营收 {overview['revenue']:.2f} 元,订单 {overview['orders']} 笔,"
         f"较上一营业日变化 {overview['revenue_delta_pct']:.1f}%。"
-        f"开放预警 {overview['open_alerts']} 条，待处理任务 {tasks['open_total']} 个；"
-        f"当前优先关注：{focus_store}。"
+        f"开放预警 {overview['open_alerts']} 条,待处理任务 {tasks['open_total']} 个;"
+        f"当前优先关注:{focus_store}。"
     )
 
 
 def build_summary(metrics: dict, open_alerts: int, pending_tasks: int) -> str:
     if metrics["revenue"] <= 0 and metrics["orders"] <= 0:
-        return "暂无销售数据。请先在数据导入页上传销售、库存或评价数据，系统将基于导入结果生成经营摘要。"
+        return "暂无销售数据。请先在数据导入页上传销售、库存或评价数据,系统将基于导入结果生成经营摘要。"
     return (
-        f"最新营业日营收 {metrics['revenue']:.2f} 元，订单 {metrics['orders']} 笔，"
-        f"客单价 {metrics['avg_order']:.2f} 元；当前开放预警 {open_alerts} 条，"
+        f"最新营业日营收 {metrics['revenue']:.2f} 元,订单 {metrics['orders']} 笔,"
+        f"客单价 {metrics['avg_order']:.2f} 元;当前开放预警 {open_alerts} 条,"
         f"待处理任务 {pending_tasks} 个。"
     )

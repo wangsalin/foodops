@@ -44,4 +44,5 @@ Within the first public wave, aim for:
 - [developer-recruiting.md](developer-recruiting.md): contributor-focused invitation.
 - [channel-posts.md](channel-posts.md): short posts for different channels.
 - [x-post.md](x-post.md): X/Twitter launch post and image order.
+- [x-long-post-cn.md](x-long-post-cn.md): Chinese X long-form post with real screenshot order.
 - [launch-checklist.md](launch-checklist.md): maintainer execution checklist.

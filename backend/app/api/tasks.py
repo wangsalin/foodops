@@ -248,7 +248,7 @@ def build_task_review_result_note(action: str, note: str | None) -> str | None:
     if not note:
         return None
     label = {"approve": "审核意见", "reject": "驳回原因", "escalate": "升级说明"}[action]
-    return f"{label}：{note}"
+    return f"{label}:{note}"
 
 
 def build_task_review_contract(task: dict, action: str | None = None) -> dict:
@@ -351,7 +351,7 @@ def create_return_repush_notification(db: Session, tenant_id: str, task_id: UUID
 
     task = fetch_task_for_relay(db, tenant_id, task_id)
     relay = issue_relay_token(task_id, task, db=db)
-    notification = create_task_h5_notification(db, tenant_id, task, relay["h5_url"], note=f"复核驳回：{note}" if note else None)
+    notification = create_task_h5_notification(db, tenant_id, task, relay["h5_url"], note=f"复核驳回:{note}" if note else None)
     apply_notification_dispatch_result(notification, dispatch_notifications_by_ids(db, [notification["id"]]))
     return {
         "h5_url": relay["h5_url"],
@@ -425,15 +425,15 @@ def insert_review_notification(db: Session, tenant_id: str, task: dict, action: 
         "escalate": "任务升级处理",
     }[action]
     content_parts = [
-        f"任务：{task.get('title') or task.get('id')}",
+        f"任务:{task.get('title') or task.get('id')}",
         {
-            "approve": "复核已通过，任务已关闭。",
-            "reject": "复核已驳回，门店需继续处理后重新提交反馈。",
-            "escalate": "复核已升级，任务优先级已提升，需要运营或督导继续跟进。",
+            "approve": "复核已通过,任务已关闭。",
+            "reject": "复核已驳回,门店需继续处理后重新提交反馈。",
+            "escalate": "复核已升级,任务优先级已提升,需要运营或督导继续跟进。",
         }[action],
     ]
     if note:
-        content_parts.append(f"复核说明：{note}")
+        content_parts.append(f"复核说明:{note}")
     db.execute(
         text(
             """

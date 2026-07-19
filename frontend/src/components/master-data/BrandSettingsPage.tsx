@@ -130,7 +130,7 @@ export function BrandSettingsPage() {
       form.setFieldsValue(brandAssetToForm(res.data));
     } catch {
       form.setFieldsValue(defaultBrand);
-      message.warning("品牌配置暂未从后端读取，已使用本地默认值。");
+      message.warning("品牌配置暂未从后端读取,已使用本地默认值。");
     } finally {
       setLoading(false);
     }
@@ -146,7 +146,7 @@ export function BrandSettingsPage() {
       if (!canManageSystem) {
         const uploadError = new Error("No system manage permission");
         options.onError?.(uploadError);
-        message.warning("当前账号没有系统管理权限，不能上传品牌素材");
+        message.warning("当前账号没有系统管理权限,不能上传品牌素材");
         return;
       }
       setUploadingImageField(field);
@@ -159,11 +159,11 @@ export function BrandSettingsPage() {
         });
         form.setFieldValue(field, res.data.url);
         options.onSuccess?.(res.data);
-        message.success(`${label}已上传，保存后生效。`);
+        message.success(`${label}已上传,保存后生效。`);
       } catch (error) {
         const uploadError = error instanceof Error ? error : new Error(`${label} upload failed`);
         options.onError?.(uploadError);
-        message.error(`${label}上传失败，请确认文件类型为 JPG、PNG、WebP 或 ICO，且不超过 5MB。`);
+        message.error(`${label}上传失败,请确认文件类型为 JPG、PNG、WebP 或 ICO,且不超过 5MB。`);
       } finally {
         setUploadingImageField(null);
       }
@@ -175,7 +175,7 @@ export function BrandSettingsPage() {
       if (!canManageSystem) {
         const uploadError = new Error("No system manage permission");
         options.onError?.(uploadError);
-        message.warning("当前账号没有系统管理权限，不能上传品牌资料");
+        message.warning("当前账号没有系统管理权限,不能上传品牌资料");
         return;
       }
       setUploadingDocKey(field);
@@ -188,11 +188,11 @@ export function BrandSettingsPage() {
         });
         form.setFieldValue(["brand_docs", field], res.data.url);
         options.onSuccess?.(res.data);
-        message.success("资料已上传，保存后生效。");
+        message.success("资料已上传,保存后生效。");
       } catch (error) {
         const uploadError = error instanceof Error ? error : new Error("Brand document upload failed");
         options.onError?.(uploadError);
-        message.error("资料上传失败，请确认文件类型为 PDF、Word、Excel 或图片，且不超过 20MB。");
+        message.error("资料上传失败,请确认文件类型为 PDF、Word、Excel 或图片,且不超过 20MB。");
       } finally {
         setUploadingDocKey(null);
       }
@@ -201,17 +201,17 @@ export function BrandSettingsPage() {
 
   async function save(values: BrandAssetForm) {
     if (!canManageSystem) {
-      message.warning("当前账号没有系统管理权限，不能修改品牌设置");
+      message.warning("当前账号没有系统管理权限,不能修改品牌设置");
       return;
     }
     setSaving(true);
     try {
       await api.put("/api/v1/brand-assets", formToBrandAsset(values));
       window.dispatchEvent(new CustomEvent("foodops:brand-updated"));
-      message.success("品牌设置已保存，AI 与页面将使用最新品牌规范。");
+      message.success("品牌设置已保存,AI 与页面将使用最新品牌规范。");
       await load();
     } catch {
-      message.error("品牌设置保存失败，请检查登录状态和 system 管理权限。");
+      message.error("品牌设置保存失败,请检查登录状态和 system 管理权限。");
     } finally {
       setSaving(false);
     }
@@ -346,7 +346,7 @@ function BrandAssetFields({
       </Row>
 
       <Form.Item name="slogan" label="品牌口号">
-        <Input placeholder="好味道的秘密藏在出品里，经营的答案沉在数据里。" />
+        <Input placeholder="好味道的秘密藏在出品里,经营的答案沉在数据里。" />
       </Form.Item>
 
       <Form.Item name="logo_url" label="Logo 地址" rules={[{ required: true, message: "请输入 Logo 地址或上传图片" }]}>
@@ -392,7 +392,7 @@ function CultureFields() {
       <Row gutter={12}>
         <Col xs={24} md={12}>
           <Form.Item name={["culture", "mission"]} label="企业使命">
-            <Input.TextArea rows={3} placeholder="企业为什么存在，解决什么经营问题。" />
+            <Input.TextArea rows={3} placeholder="企业为什么存在,解决什么经营问题。" />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
@@ -402,7 +402,7 @@ function CultureFields() {
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={["culture", "values"]} label="核心价值观">
-            <Input.TextArea rows={4} placeholder="例如：真实、清爽、负责、持续复盘。" />
+            <Input.TextArea rows={4} placeholder="例如:真实、清爽、负责、持续复盘。" />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
@@ -422,7 +422,7 @@ function CultureFields() {
         </Col>
       </Row>
       <Form.Item name={["culture", "service_promise"]} label="顾客承诺">
-        <Input.TextArea rows={3} placeholder="例如：口感稳定、出品干净、反馈及时、问题闭环。" />
+        <Input.TextArea rows={3} placeholder="例如:口感稳定、出品干净、反馈及时、问题闭环。" />
       </Form.Item>
     </div>
   );
@@ -439,7 +439,7 @@ function ExpressionFields() {
         </div>
       </div>
       <Form.Item name="tone" label="品牌语气">
-        <Input.TextArea rows={3} placeholder="描述整体语气，例如清爽、茶感、年轻、可信赖。" />
+        <Input.TextArea rows={3} placeholder="描述整体语气,例如清爽、茶感、年轻、可信赖。" />
       </Form.Item>
       <Row gutter={12}>
         <Col xs={24} md={12}>
@@ -454,7 +454,7 @@ function ExpressionFields() {
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={["expression", "customer_reply_style"]} label="顾客回复风格">
-            <Input.TextArea rows={3} placeholder="真诚、具体、先回应感受，再说明处理动作。" />
+            <Input.TextArea rows={3} placeholder="真诚、具体、先回应感受,再说明处理动作。" />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
@@ -464,7 +464,7 @@ function ExpressionFields() {
         </Col>
       </Row>
       <Form.Item name={["expression", "report_style"]} label="经营报告风格">
-        <Input.TextArea rows={3} placeholder="先结论、再数据、再建议，避免空泛形容。" />
+        <Input.TextArea rows={3} placeholder="先结论、再数据、再建议,避免空泛形容。" />
       </Form.Item>
       <Form.Item name="forbidden_rules" label="品牌禁用规则">
         <Input.TextArea rows={3} placeholder="描述不能出现的视觉、文案、框架或数据使用规则。" />
@@ -483,18 +483,18 @@ function AiPolicyFields() {
         <CloudOutlined />
         <div>
           <b>AI 约束会注入受控 AI</b>
-          <span>仅影响 V1 已有日报、异常归因和运营建议口径，不接入外部自动代理框架。</span>
+          <span>仅影响 V1 已有日报、异常归因和运营建议口径,不接入外部自动代理框架。</span>
         </div>
       </div>
       <Row gutter={12}>
         <Col xs={24} md={12}>
           <Form.Item name={["ai_policy", "daily_report_rules"]} label="AI 日报规则">
-            <Input.TextArea rows={4} placeholder="日报先输出经营结论，再列风险和跟进事项。" />
+            <Input.TextArea rows={4} placeholder="日报先输出经营结论,再列风险和跟进事项。" />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={["ai_policy", "attribution_rules"]} label="异常归因规则">
-            <Input.TextArea rows={4} placeholder="归因只给可人工复核的可能原因，不直接判定责任。" />
+            <Input.TextArea rows={4} placeholder="归因只给可人工复核的可能原因,不直接判定责任。" />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
@@ -504,7 +504,7 @@ function AiPolicyFields() {
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={["ai_policy", "output_boundaries"]} label="输出边界">
-            <Input.TextArea rows={4} placeholder="不得编造数据，不得请求外部工具，不得输出未经验证的结论。" />
+            <Input.TextArea rows={4} placeholder="不得编造数据,不得请求外部工具,不得输出未经验证的结论。" />
           </Form.Item>
         </Col>
       </Row>
@@ -527,7 +527,7 @@ function BrandDocsFields({
         <BookOutlined />
         <div>
           <b>品牌资料索引</b>
-          <span>V1 先记录本地资料地址；后续可与企业知识库 `brand / training / policy` 分类打通。</span>
+          <span>V1 先记录本地资料地址;后续可与企业知识库 `brand / training / policy` 分类打通。</span>
         </div>
       </div>
       <Row gutter={12}>

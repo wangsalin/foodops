@@ -185,7 +185,7 @@ export function StoresPage() {
       setStores(storeRes.data);
       setUsers(userRes.data);
     } catch {
-      message.error("门店数据加载失败，请确认后端服务和登录状态");
+      message.error("门店数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -263,7 +263,7 @@ export function StoresPage() {
       form.resetFields();
       await load();
     } catch {
-      message.error("门店档案保存失败，请检查编码是否重复或字段是否合法");
+      message.error("门店档案保存失败,请检查编码是否重复或字段是否合法");
     } finally {
       setSaving(false);
     }
@@ -296,7 +296,7 @@ export function StoresPage() {
       message.success("门店图片已上传");
       options.onSuccess?.(res.data);
     } catch {
-      message.error("门店图片上传失败，请稍后重试");
+      message.error("门店图片上传失败,请稍后重试");
       options.onError?.(new Error("upload failed"));
     }
   }
@@ -314,7 +314,7 @@ export function StoresPage() {
       <section className="flow-band">
         <div>
           <span className="flow-kicker">门店主数据</span>
-          <div className="flow-title">已建档 {summary.total} 家，营业中 {summary.active} 家</div>
+          <div className="flow-title">已建档 {summary.total} 家,营业中 {summary.active} 家</div>
           <div className="flow-text">直营 {summary.direct} 家 · 加盟 {summary.franchise} 家 · 待绑定负责人 {summary.unbound} 家 · 缺少图片 {summary.missingImages} 家</div>
         </div>
         <Space wrap>
@@ -413,7 +413,7 @@ export function StoresPage() {
         />
       </Card>
 
-      <Drawer title={preview ? `门店预览：${formatStoreName(preview.name)}` : "门店预览"} open={Boolean(preview)} onClose={() => setPreview(null)} width={560} destroyOnHidden>
+      <Drawer title={preview ? `门店预览:${formatStoreName(preview.name)}` : "门店预览"} open={Boolean(preview)} onClose={() => setPreview(null)} width={560} destroyOnHidden>
         {preview ? (
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
             <section className="detail-hero store-profile-hero">
@@ -505,7 +505,7 @@ export function StoresPage() {
             >
               <p className="product-upload-icon"><UploadOutlined /></p>
               <p className="ant-upload-text">上传门店门头、店内或环境图</p>
-              <p className="ant-upload-hint">支持 JPG、PNG、WebP，单张不超过 5MB。首张默认作为封面。</p>
+              <p className="ant-upload-hint">支持 JPG、PNG、WebP,单张不超过 5MB。首张默认作为封面。</p>
             </Upload.Dragger>
             {editingImageUrls.length ? (
               <div className="store-edit-image-grid">
@@ -531,7 +531,7 @@ export function StoresPage() {
             <Form.Item name="business_district_type" label="商圈属性"><Select allowClear options={districtOptions} /></Form.Item>
             <Form.Item name="region" label="区域"><Input placeholder="上海 / 杭州 / 华东一区" /></Form.Item>
             <Form.Item name="address" label="详细地址"><Input /></Form.Item>
-            <Form.Item name="area_sqm" label="面积（㎡）"><InputNumber min={0} precision={2} style={{ width: "100%" }} /></Form.Item>
+            <Form.Item name="area_sqm" label="面积(㎡)"><InputNumber min={0} precision={2} style={{ width: "100%" }} /></Form.Item>
             <Form.Item name="seat_count" label="座位数"><InputNumber min={0} precision={0} style={{ width: "100%" }} /></Form.Item>
             <Form.Item name="contact_phone" label="门店电话"><Input /></Form.Item>
             <Form.Item name="operating_hours" label="营业时间"><Input placeholder="10:00-22:00" /></Form.Item>
@@ -545,10 +545,10 @@ export function StoresPage() {
 
           <section className="store-form-section">
             <Form.Item name="channel_tags" label="经营渠道">
-              <Select mode="tags" options={channelOptions.map((item) => ({ value: item, label: item }))} tokenSeparators={[",", "，"]} />
+              <Select mode="tags" options={channelOptions.map((item) => ({ value: item, label: item }))} tokenSeparators={[",", ","]} />
             </Form.Item>
             <Form.Item name="property_tags" label="门店属性">
-              <Select mode="tags" options={propertyOptions.map((item) => ({ value: item, label: item }))} tokenSeparators={[",", "，"]} />
+              <Select mode="tags" options={propertyOptions.map((item) => ({ value: item, label: item }))} tokenSeparators={[",", ","]} />
             </Form.Item>
           </section>
 

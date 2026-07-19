@@ -99,12 +99,12 @@ const dataScopeLabel: Record<string, string> = {
 };
 
 const dataScopeHint: Record<string, string> = {
-  all: "可查看当前租户下全部经营数据，适合总部管理层。",
-  region: "预留区域维度，适合后续按行政区、城市或加盟区域自动授权。",
-  multi_store: "按人员绑定的门店集合生效，适合督导、区域负责人和多店店长。",
-  own_stores: "结合用户可见门店范围生效，适合加盟商或门店负责人。",
-  single_store: "预留单门店视角，适合单店负责人。",
-  channel: "预留渠道维度，适合渠道运营。",
+  all: "可查看当前租户下全部经营数据,适合总部管理层。",
+  region: "预留区域维度,适合后续按行政区、城市或加盟区域自动授权。",
+  multi_store: "按人员绑定的门店集合生效,适合督导、区域负责人和多店店长。",
+  own_stores: "结合用户可见门店范围生效,适合加盟商或门店负责人。",
+  single_store: "预留单门店视角,适合单店负责人。",
+  channel: "预留渠道维度,适合渠道运营。",
   dept: "按部门边界限制组织数据。"
 };
 
@@ -188,7 +188,7 @@ export function OrgPage() {
       setSelectedDepartmentId((current) => current || deptRes.data[0]?.id || null);
       setSelectedRoleId((current) => current || roleRes.data[0]?.id || null);
     } catch {
-      message.error("组织架构加载失败，请确认后端服务和登录状态");
+      message.error("组织架构加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -267,7 +267,7 @@ export function OrgPage() {
       deptForm.resetFields();
       await load();
     } catch {
-      message.error("部门保存失败，请检查名称和上级部门");
+      message.error("部门保存失败,请检查名称和上级部门");
     }
   }
 
@@ -278,7 +278,7 @@ export function OrgPage() {
       setSelectedDepartmentId(null);
       await load();
     } catch {
-      message.error("部门删除失败：请先移走下级部门或部门人员");
+      message.error("部门删除失败:请先移走下级部门或部门人员");
     }
   }
 
@@ -304,7 +304,7 @@ export function OrgPage() {
       setDeptRoleOpen(false);
       deptRoleForm.resetFields();
     } catch {
-      message.error("部门角色保存失败：请保留该部门已有人员正在使用的角色");
+      message.error("部门角色保存失败:请保留该部门已有人员正在使用的角色");
     }
   }
 
@@ -343,7 +343,7 @@ export function OrgPage() {
       message.success("角色副本已创建");
       await load();
     } catch {
-      message.error("角色复制失败，请确认名称未重复");
+      message.error("角色复制失败,请确认名称未重复");
     }
   }
 
@@ -354,7 +354,7 @@ export function OrgPage() {
       setSelectedRoleId(null);
       await load();
     } catch {
-      message.error("角色删除失败：请先移除该角色下的人员");
+      message.error("角色删除失败:请先移除该角色下的人员");
     }
   }
 
@@ -366,7 +366,7 @@ export function OrgPage() {
     try {
       if (editingRole) {
         await api.put(`/api/v1/org/roles/${editingRole.id}`, payload);
-        message.success("角色权限已更新，用户重新登录后生效");
+        message.success("角色权限已更新,用户重新登录后生效");
       } else {
         const res = await api.post("/api/v1/org/roles", payload);
         setSelectedRoleId(res.data.id);
@@ -376,7 +376,7 @@ export function OrgPage() {
       roleForm.resetFields();
       await load();
     } catch {
-      message.error("角色保存失败，请检查名称、权限和数据范围");
+      message.error("角色保存失败,请检查名称、权限和数据范围");
     }
   }
 
@@ -390,7 +390,7 @@ export function OrgPage() {
         <div>
           <span className="flow-kicker">组织权限</span>
           <div className="flow-title">组织树、角色权限和人员影响面统一维护</div>
-          <div className="flow-text">部门决定人员归属，角色决定模块权限和数据范围。编辑角色前可直接查看会影响哪些账号。</div>
+          <div className="flow-text">部门决定人员归属,角色决定模块权限和数据范围。编辑角色前可直接查看会影响哪些账号。</div>
         </div>
         <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={load} loading={loading}>刷新</Button>
@@ -456,7 +456,7 @@ export function OrgPage() {
                 <div>
                   <Typography.Text type="secondary">{selectedDepartment.type === "team" ? "小组" : "部门"}</Typography.Text>
                   <h3>{formatOrgText(selectedDepartment.name)}</h3>
-                  <p>上级：{selectedDepartment.parent_id ? formatOrgText(departmentById.get(selectedDepartment.parent_id)?.name) || "未找到上级" : "顶级组织"}</p>
+                  <p>上级:{selectedDepartment.parent_id ? formatOrgText(departmentById.get(selectedDepartment.parent_id)?.name) || "未找到上级" : "顶级组织"}</p>
                 </div>
               </div>
               <div className="org-info-grid">
@@ -469,7 +469,7 @@ export function OrgPage() {
               <div className="department-role-panel">
                 <div>
                   <b>部门可用角色</b>
-                  <span>人员新增或编辑时，只能选择当前部门已开放的角色。</span>
+                  <span>人员新增或编辑时,只能选择当前部门已开放的角色。</span>
                 </div>
                 <Space wrap className="department-role-tags">
                   {selectedDepartmentRoles.length ? (
@@ -569,11 +569,11 @@ export function OrgPage() {
               <div className="org-assignment-guide">
                 <div>
                   <b>人员绑定在人员权限页完成</b>
-                  <span>这里定义角色能做什么；具体谁使用该角色、能看哪些门店，需要到人员权限页维护。</span>
+                  <span>这里定义角色能做什么;具体谁使用该角色、能看哪些门店,需要到人员权限页维护。</span>
                 </div>
                 <Space wrap>
                   {canManageUsers ? <Button type="primary" icon={<UserAddOutlined />} onClick={() => openRoleUsers(selectedRole)}>分配人员</Button> : null}
-                  <Button onClick={() => openRoleUsers(selectedRole)}>查看绑定人员（{selectedRoleUsers.length}）</Button>
+                  <Button onClick={() => openRoleUsers(selectedRole)}>查看绑定人员({selectedRoleUsers.length})</Button>
                 </Space>
               </div>
               <div className="org-permission-tags">
@@ -610,7 +610,7 @@ export function OrgPage() {
       </section>
 
       <Modal
-        title={editingDepartment ? `编辑部门：${formatOrgText(editingDepartment.name)}` : "新增部门"}
+        title={editingDepartment ? `编辑部门:${formatOrgText(editingDepartment.name)}` : "新增部门"}
         open={deptOpen}
         onCancel={() => setDeptOpen(false)}
         footer={null}
@@ -619,7 +619,7 @@ export function OrgPage() {
       >
         <Form form={deptForm} layout="vertical" onFinish={submitDepartment} initialValues={{ type: "dept", sort: 0 }}>
           <Form.Item name="name" label="部门名称" rules={[{ required: true, message: "请输入部门名称" }]}>
-            <Input placeholder="例如：华东运营部" />
+            <Input placeholder="例如:华东运营部" />
           </Form.Item>
           <Form.Item name="parent_id" label="上级部门">
             <Select
@@ -646,7 +646,7 @@ export function OrgPage() {
       </Modal>
 
       <Modal
-        title={`配置部门角色${selectedDepartment ? `：${formatOrgText(selectedDepartment.name)}` : ""}`}
+        title={`配置部门角色${selectedDepartment ? `:${formatOrgText(selectedDepartment.name)}` : ""}`}
         open={deptRoleOpen}
         onCancel={() => setDeptRoleOpen(false)}
         footer={null}
@@ -655,8 +655,8 @@ export function OrgPage() {
       >
         <Form form={deptRoleForm} layout="vertical" onFinish={submitDepartmentRoles}>
           <div className="department-role-modal-guide">
-            <b>部门决定人员归属，角色决定权限边界</b>
-            <span>只有在这里开放的角色，才会出现在人员新增/编辑表单的角色下拉中。</span>
+            <b>部门决定人员归属,角色决定权限边界</b>
+            <span>只有在这里开放的角色,才会出现在人员新增/编辑表单的角色下拉中。</span>
           </div>
           <Form.Item
             name="role_ids"
@@ -680,7 +680,7 @@ export function OrgPage() {
       </Modal>
 
       <Modal
-        title={editingRole ? `编辑角色：${formatOrgText(editingRole.name)}` : "新增角色"}
+        title={editingRole ? `编辑角色:${formatOrgText(editingRole.name)}` : "新增角色"}
         open={roleOpen}
         onCancel={() => setRoleOpen(false)}
         footer={null}
@@ -691,7 +691,7 @@ export function OrgPage() {
         <Form form={roleForm} layout="vertical" onFinish={submitRole} initialValues={{ data_scope: "all", permissions: defaultPermissions }}>
           <div className="role-form-grid">
             <Form.Item name="name" label="角色名称" rules={[{ required: true, message: "请输入角色名称" }]}>
-              <Input placeholder="例如：运营总监" />
+              <Input placeholder="例如:运营总监" />
             </Form.Item>
             <Form.Item name="data_scope" label="数据范围">
               <Select

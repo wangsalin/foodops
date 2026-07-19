@@ -155,7 +155,7 @@ def me(request: Request, db: Session = Depends(get_db)) -> dict:
 
 def get_active_user_for_token(db: Session, user_id: str | None) -> dict:
     if not user_id:
-        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效，请重新登录", status_code=401)
+        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效,请重新登录", status_code=401)
     user = db.execute(
         text(
             """
@@ -169,7 +169,7 @@ def get_active_user_for_token(db: Session, user_id: str | None) -> dict:
         {"user_id": user_id},
     ).mappings().first()
     if not user or user["status"] != "active":
-        raise AppError(code="AUTH_USER_DISABLED", message="账号不可用，请联系管理员", status_code=401)
+        raise AppError(code="AUTH_USER_DISABLED", message="账号不可用,请联系管理员", status_code=401)
     return dict(user)
 
 

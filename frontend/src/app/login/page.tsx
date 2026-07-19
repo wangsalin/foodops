@@ -36,7 +36,7 @@ export default function LoginPage() {
       saveSession(data.access_token, data.user, data.refresh_token);
       router.push("/dashboard");
     } catch {
-      setError("账号或密码错误，请检查后重试");
+      setError("账号或密码错误,请检查后重试");
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export default function LoginPage() {
             <Typography.Text className="login-eyebrow">{brand.brandName}</Typography.Text>
             <Typography.Title>{brand.slogan}</Typography.Title>
             <Typography.Paragraph>
-              面向连锁餐饮的本地经营闭环：数据导入、经营看板、异常预警、任务派发、门店 H5 反馈和审计追踪。
+              面向连锁餐饮的本地经营闭环:数据导入、经营看板、异常预警、任务派发、门店 H5 反馈和审计追踪。
             </Typography.Paragraph>
           </div>
 
@@ -89,7 +89,7 @@ export default function LoginPage() {
             <Typography.Text className="login-eyebrow">欢迎回来</Typography.Text>
             <Typography.Title level={1}>登录工作台</Typography.Title>
             <Typography.Paragraph>
-              使用系统账号进入经营看板，处理门店异常、任务派发和门店反馈。
+              使用系统账号进入经营看板,处理门店异常、任务派发和门店反馈。
             </Typography.Paragraph>
           </div>
 
@@ -107,7 +107,7 @@ export default function LoginPage() {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>记住我</Checkbox>
               </Form.Item>
-              <button className="login-text-button" type="button">忘记密码？</button>
+              <button className="login-text-button" type="button">忘记密码?</button>
             </div>
 
             <Button type="primary" htmlType="submit" block loading={loading} className="login-submit">

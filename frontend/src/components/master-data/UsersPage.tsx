@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { App, Button, Card, Form, Input, Modal, Select, Space, Table, Tag, Typography } from "antd";
 import { useSearchParams } from "next/navigation";
@@ -33,13 +33,13 @@ type UserRecord = {
 };
 
 const dataScopeLabel: Record<string, string> = {
-  all: "å…¨éƒ¨æ•°æ®",
-  region: "åŒºåŸŸé—¨åº—",
-  multi_store: "å¤šé—¨åº—ç®¡è¾–",
-  own_stores: "è´Ÿè´£é—¨åº—",
-  single_store: "å•é—¨åº—",
-  channel: "æ¸ é“",
-  dept: "æœ¬éƒ¨é—¨"
+  all: "全部数据",
+  region: "区域门店",
+  multi_store: "多门店管辖",
+  own_stores: "负责门店",
+  single_store: "单门店",
+  channel: "渠道",
+  dept: "本部门"
 };
 
 const permissionModules = rolePermissionModules;
@@ -48,33 +48,33 @@ const permissionColor = permissionValueColor;
 
 function formatPersonName(value?: string | null) {
   if (!value) return "-";
-  if (/Supervisor Scope Smoke/i.test(value)) return "éªŒæ”¶ç£å¯¼è´¦å·";
-  if (/Scope Smoke/i.test(value)) return "éªŒæ”¶è´¦å·";
+  if (/Supervisor Scope Smoke/i.test(value)) return "验收督导账号";
+  if (/Scope Smoke/i.test(value)) return "验收账号";
   return value;
 }
 
 function formatAccountName(value?: string | null) {
   if (!value) return "-";
-  if (value === "admin") return "ç³»ç»Ÿç®¡ç†å‘˜è´¦å·";
-  if (/^tmp_supervisor_/i.test(value)) return "éªŒæ”¶ç£å¯¼è´¦å·";
-  if (/^accept_store_manager$/i.test(value)) return "éªŒæ”¶åº—é•¿è´¦å·";
-  if (/^accept_supervisor$/i.test(value)) return "éªŒæ”¶ç£å¯¼è´¦å·";
-  if (/^accept_warehouse$/i.test(value)) return "éªŒæ”¶ä»“ç®¡è´¦å·";
-  if (/^accept_ops_director$/i.test(value)) return "éªŒæ”¶è¿è¥è´¦å·";
+  if (value === "admin") return "系统管理员账号";
+  if (/^tmp_supervisor_/i.test(value)) return "验收督导账号";
+  if (/^accept_store_manager$/i.test(value)) return "验收店长账号";
+  if (/^accept_supervisor$/i.test(value)) return "验收督导账号";
+  if (/^accept_warehouse$/i.test(value)) return "验收仓管账号";
+  if (/^accept_ops_director$/i.test(value)) return "验收运营账号";
   return value;
 }
 
 function formatOrgName(value?: string | null) {
   if (!value) return "-";
-  if (/^TMP-SUPERVISOR-DEPT/i.test(value)) return "éªŒæ”¶ç£å¯¼éƒ¨é—¨";
-  if (/^TMP-SUPERVISOR-/i.test(value)) return "éªŒæ”¶ç£å¯¼è§’è‰²";
-  if (/Supervisor Scope Smoke/i.test(value)) return "éªŒæ”¶ç£å¯¼è§’è‰²";
+  if (/^TMP-SUPERVISOR-DEPT/i.test(value)) return "验收督导部门";
+  if (/^TMP-SUPERVISOR-/i.test(value)) return "验收督导角色";
+  if (/Supervisor Scope Smoke/i.test(value)) return "验收督导角色";
   return value;
 }
 
 function formatStoreName(value?: string | null) {
-  if (!value) return "æœªå‘½åé—¨åº—";
-  if (/^Scope Store/i.test(value)) return "æµ‹è¯•é—¨åº—";
+  if (!value) return "未命名门店";
+  if (/^Scope Store/i.test(value)) return "测试门店";
   return value;
 }
 
@@ -124,10 +124,10 @@ export function UsersPage() {
   const storeScopeRequired = Boolean(selectedFormRole && selectedFormScope !== "all");
   const storeScopeHint = getStoreScopeHint(selectedFormRole);
   const rolePlaceholder = !watchedDepartmentId
-    ? "è¯·å…ˆé€‰æ‹©éƒ¨é—¨"
+    ? "请先选择部门"
     : assignableRoles.length
-      ? "é€‰æ‹©è¯¥éƒ¨é—¨ä¸‹å¯åˆ†é…çš„è§’è‰²"
-      : "è¯¥éƒ¨é—¨æš‚æ— å¯ç”¨è§’è‰²ï¼Œè¯·å…ˆåˆ°ç»„ç»‡æž¶æž„é…ç½®";
+      ? "选择该部门下可分配的角色"
+      : "该部门暂无可用角色,请先到组织架构配置";
   const departmentRoleGuide = getDepartmentRoleGuide(Boolean(watchedDepartmentId), assignableRoles.length);
   const departmentFilter = searchParams.get("department_id");
   const roleFilter = searchParams.get("role_id");
@@ -141,7 +141,7 @@ export function UsersPage() {
   const filterLabel = useMemo(() => {
     const departmentName = departments.find((item) => item.id === departmentFilter)?.name;
     const roleName = roles.find((item) => item.id === roleFilter)?.name;
-    return [departmentName ? `éƒ¨é—¨ï¼š${departmentName}` : "", roleName ? `è§’è‰²ï¼š${roleName}` : ""].filter(Boolean).join(" / ");
+    return [departmentName ? `部门:${departmentName}` : "", roleName ? `角色:${roleName}` : ""].filter(Boolean).join(" / ");
   }, [departmentFilter, departments, roleFilter, roles]);
 
   const load = useCallback(async () => {
@@ -158,7 +158,7 @@ export function UsersPage() {
           const storeRes = await api.get("/api/v1/stores");
           storeData = storeRes.data;
         } catch {
-          message.warning("é—¨åº—èŒƒå›´æ•°æ®åŠ è½½å¤±è´¥ï¼Œäººå‘˜åˆ—è¡¨ä»å¯æŸ¥çœ‹ï¼Œè¯·æ£€æŸ¥å½“å‰è´¦å·çš„é—¨åº—è¯»å–æƒé™");
+          message.warning("门店范围数据加载失败,人员列表仍可查看,请检查当前账号的门店读取权限");
         }
       }
       setUsers(userRes.data);
@@ -166,7 +166,7 @@ export function UsersPage() {
       setDepartments(deptRes.data);
       setStores(storeData);
     } catch {
-      message.error("äººå‘˜æ•°æ®åŠ è½½å¤±è´¥ï¼Œè¯·ç¡®è®¤åŽç«¯æœåŠ¡å’Œç™»å½•çŠ¶æ€");
+      message.error("人员数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -182,7 +182,7 @@ export function UsersPage() {
       setAssignableRoles(res.data);
     } catch {
       setAssignableRoles([]);
-      message.error("è¯¥éƒ¨é—¨å¯åˆ†é…è§’è‰²åŠ è½½å¤±è´¥ï¼Œè¯·åˆ°ç»„ç»‡æž¶æž„æ£€æŸ¥éƒ¨é—¨è§’è‰²é…ç½®");
+      message.error("该部门可分配角色加载失败,请到组织架构检查部门角色配置");
     }
   }, [message]);
 
@@ -238,11 +238,11 @@ export function UsersPage() {
     let userId = editing?.id;
     if (editing) {
       await api.patch(`/api/v1/org/users/${editing.id}`, userPayload);
-      message.success("äººå‘˜ä¿¡æ¯å·²æ›´æ–°");
+      message.success("人员信息已更新");
     } else {
       const res = await api.post("/api/v1/org/users", userPayload);
       userId = res.data.id;
-      message.success("äººå‘˜å·²åˆ›å»º");
+      message.success("人员已创建");
     }
     if (userId) {
       await api.put(`/api/v1/org/users/${userId}/store-scopes`, { store_ids: storeScopeIds });
@@ -255,7 +255,7 @@ export function UsersPage() {
   async function resetPassword(values: { password: string }) {
     if (!resetUser) return;
     await api.post(`/api/v1/org/users/${resetUser.id}/reset-password`, values);
-    message.success("å¯†ç å·²é‡ç½®");
+    message.success("密码已重置");
     setResetOpen(false);
     resetForm.resetFields();
   }
@@ -266,45 +266,45 @@ export function UsersPage() {
         className="panel-card"
         title={
           <Space wrap>
-            <span>äººå‘˜åˆ—è¡¨</span>
+            <span>人员列表</span>
             {filterLabel ? <Tag color="blue">{filterLabel}</Tag> : null}
             <Tag>{filteredUsers.length} / {users.length}</Tag>
           </Space>
         }
-        extra={canManageUsers ? <Button type="primary" onClick={startCreate}>æ–°å¢žäººå‘˜</Button> : null}
+        extra={canManageUsers ? <Button type="primary" onClick={startCreate}>新增人员</Button> : null}
       >
         <Table
           loading={loading}
           rowKey="id"
           dataSource={filteredUsers}
           scroll={{ x: 1280 }}
-          locale={{ emptyText: filterLabel ? "è¯¥ç­›é€‰æ¡ä»¶ä¸‹æš‚æ— äººå‘˜ï¼Œè¯·æ–°å¢žäººå‘˜æˆ–ç¼–è¾‘å·²æœ‰äººå‘˜åˆ†é…è§’è‰²ã€‚" : "æš‚æ— äººå‘˜" }}
+          locale={{ emptyText: filterLabel ? "该筛选条件下暂无人员,请新增人员或编辑已有人员分配角色。" : "暂无人员" }}
           columns={[
-            { title: "å§“å", dataIndex: "name", width: 120, render: (value: string) => formatPersonName(value) },
-            { title: "è´¦å·", dataIndex: "username", width: 150, render: formatAccountName },
-            { title: "éƒ¨é—¨", dataIndex: "department_name", width: 140, render: (value: string) => formatOrgName(value) },
-            { title: "è§’è‰²", dataIndex: "role_name", width: 170, render: (value: string) => formatOrgName(value) },
+            { title: "姓名", dataIndex: "name", width: 120, render: (value: string) => formatPersonName(value) },
+            { title: "账号", dataIndex: "username", width: 150, render: formatAccountName },
+            { title: "部门", dataIndex: "department_name", width: 140, render: (value: string) => formatOrgName(value) },
+            { title: "角色", dataIndex: "role_name", width: 170, render: (value: string) => formatOrgName(value) },
             {
-              title: "æ•°æ®èŒƒå›´",
+              title: "数据范围",
               dataIndex: "role_data_scope",
               width: 110,
-              render: (value: string) => <Tag color={value === "all" ? "gold" : "blue"}>{dataScopeLabel[value] || "æœªè®¾ç½®"}</Tag>
+              render: (value: string) => <Tag color={value === "all" ? "gold" : "blue"}>{dataScopeLabel[value] || "未设置"}</Tag>
             },
             {
-              title: "æƒé™æ‘˜è¦",
+              title: "权限摘要",
               dataIndex: "role_permissions",
               width: 160,
               render: (value: PermissionMap | undefined) => renderPermissionSummary(value)
             },
             {
-              title: "å¯è§é—¨åº—",
+              title: "可见门店",
               dataIndex: "store_scope_names",
               width: 160,
               render: (_: string[], record: UserRecord) => renderStoreScope(record)
             },
-            { title: "æ‰‹æœºå·", dataIndex: "phone", width: 140 },
+            { title: "手机号", dataIndex: "phone", width: 140 },
             {
-              title: "é€šçŸ¥æ¸ é“",
+              title: "通知渠道",
               dataIndex: "default_channel",
               width: 110,
               render: (value: string) => {
@@ -314,17 +314,17 @@ export function UsersPage() {
                 return <Tag color={color[channel] || "default"}>{label[channel]}</Tag>;
               }
             },
-            { title: "çŠ¶æ€", dataIndex: "status", width: 90, render: (status: string) => <Tag color={status === "active" ? "green" : "default"}>{status === "active" ? "å¯ç”¨" : "åœç”¨"}</Tag> },
+            { title: "状态", dataIndex: "status", width: 90, render: (status: string) => <Tag color={status === "active" ? "green" : "default"}>{status === "active" ? "启用" : "停用"}</Tag> },
             {
-              title: "æ“ä½œ",
+              title: "操作",
               width: 210,
               fixed: "right",
               render: (_: unknown, record: UserRecord) => (
                 <Space>
                   {canManageUsers ? (
                     <>
-                      <Button type="link" onClick={() => setPermissionUser(record)}>æƒé™è¯¦æƒ…</Button>
-                      <Button type="link" onClick={() => startEdit(record)}>ç¼–è¾‘</Button>
+                      <Button type="link" onClick={() => setPermissionUser(record)}>权限详情</Button>
+                      <Button type="link" onClick={() => startEdit(record)}>编辑</Button>
                       <Button
                         type="link"
                         onClick={() => {
@@ -333,11 +333,11 @@ export function UsersPage() {
                           setResetOpen(true);
                         }}
                       >
-                        é‡ç½®å¯†ç 
+                        重置密码
                       </Button>
                     </>
                   ) : (
-                    <Button type="link" onClick={() => setPermissionUser(record)}>æŸ¥çœ‹æƒé™</Button>
+                    <Button type="link" onClick={() => setPermissionUser(record)}>查看权限</Button>
                   )}
                 </Space>
               )
@@ -346,32 +346,32 @@ export function UsersPage() {
         />
       </Card>
 
-      <Modal className="responsive-modal user-form-modal" title={editing ? "ç¼–è¾‘äººå‘˜" : "æ–°å¢žäººå‘˜"} open={open} onCancel={() => setOpen(false)} footer={null} forceRender>
+      <Modal className="responsive-modal user-form-modal" title={editing ? "编辑人员" : "新增人员"} open={open} onCancel={() => setOpen(false)} footer={null} forceRender>
         <Form form={form} layout="vertical" onFinish={submit}>
-          <Form.Item name="name" label="å§“å" rules={[{ required: true, message: "è¯·è¾“å…¥å§“å" }]}><Input /></Form.Item>
+          <Form.Item name="name" label="姓名" rules={[{ required: true, message: "请输入姓名" }]}><Input /></Form.Item>
           {!editing && (
             <>
-              <Form.Item name="username" label="ç™»å½•è´¦å·" rules={[{ required: true, message: "è¯·è¾“å…¥è´¦å·" }]}><Input /></Form.Item>
-              <Form.Item name="password" label="åˆå§‹å¯†ç " rules={[{ required: true, min: 8, message: "è‡³å°‘ 8 ä½" }]}><Input.Password /></Form.Item>
+              <Form.Item name="username" label="登录账号" rules={[{ required: true, message: "请输入账号" }]}><Input /></Form.Item>
+              <Form.Item name="password" label="初始密码" rules={[{ required: true, min: 8, message: "至少 8 位" }]}><Input.Password /></Form.Item>
             </>
           )}
-          <Form.Item name="phone" label="æ‰‹æœºå·"><Input placeholder="ç”¨äºŽäººå‘˜æ¡£æ¡ˆå’ŒåŽç»­çŸ­ä¿¡èƒ½åŠ›é¢„ç•™" /></Form.Item>
-          <Form.Item name="default_channel" label="é»˜è®¤é€šçŸ¥æ¸ é“" initialValue="system">
+          <Form.Item name="phone" label="手机号"><Input placeholder="用于人员档案和后续短信能力预留" /></Form.Item>
+          <Form.Item name="default_channel" label="默认通知渠道" initialValue="system">
             <Select
               options={[
                 { value: "system", label: "系统内通知" }
               ]}
             />
           </Form.Item>
-          <Form.Item name="department_id" label="éƒ¨é—¨" rules={[{ required: true, message: "è¯·å…ˆé€‰æ‹©éƒ¨é—¨" }]}>
+          <Form.Item name="department_id" label="部门" rules={[{ required: true, message: "请先选择部门" }]}>
             <Select
               allowClear
               onChange={handleDepartmentChange}
-              placeholder="å…ˆé€‰æ‹©äººå‘˜æ‰€å±žéƒ¨é—¨"
+              placeholder="先选择人员所属部门"
               options={departments.map((d) => ({ value: d.id, label: d.name }))}
             />
           </Form.Item>
-          <Form.Item name="role_id" label="è§’è‰²" rules={[{ required: true, message: "è¯·é€‰æ‹©è¯¥éƒ¨é—¨ä¸‹å¯åˆ†é…çš„è§’è‰²" }]}>
+          <Form.Item name="role_id" label="角色" rules={[{ required: true, message: "请选择该部门下可分配的角色" }]}>
             <Select
               allowClear
               disabled={roleSelectDisabled}
@@ -379,7 +379,7 @@ export function UsersPage() {
               placeholder={rolePlaceholder}
               options={assignableRoles.map((r) => ({
                 value: r.id,
-                label: `${formatOrgName(r.name)}${r.data_scope ? ` Â· ${dataScopeLabel[r.data_scope] || r.data_scope}` : ""}`
+                label: `${formatOrgName(r.name)}${r.data_scope ? ` · ${dataScopeLabel[r.data_scope] || r.data_scope}` : ""}`
               }))}
             />
           </Form.Item>
@@ -393,16 +393,16 @@ export function UsersPage() {
           </div>
           <Form.Item
             name="store_scope_ids"
-            label="å¯è§é—¨åº—"
+            label="可见门店"
             rules={[
               {
                 validator: (_, value: string[] = []) => {
                   if (!selectedFormRole || selectedFormScope === "all") return Promise.resolve();
                   if (selectedFormScope === "single_store" && value.length !== 1) {
-                    return Promise.reject(new Error("å•é—¨åº—è§’è‰²å¿…é¡»é€‰æ‹© 1 å®¶é—¨åº—"));
+                    return Promise.reject(new Error("单门店角色必须选择 1 家门店"));
                   }
                   if (!value.length) {
-                    return Promise.reject(new Error("è¯¥è§’è‰²éœ€è¦é…ç½®è‡³å°‘ 1 å®¶å¯è§é—¨åº—"));
+                    return Promise.reject(new Error("该角色需要配置至少 1 家可见门店"));
                   }
                   return Promise.resolve();
                 }
@@ -419,49 +419,49 @@ export function UsersPage() {
             />
           </Form.Item>
           {editing && (
-            <Form.Item name="status" label="çŠ¶æ€">
-              <Select options={[{ value: "active", label: "å¯ç”¨" }, { value: "disabled", label: "åœç”¨" }]} />
+            <Form.Item name="status" label="状态">
+              <Select options={[{ value: "active", label: "启用" }, { value: "disabled", label: "停用" }]} />
             </Form.Item>
           )}
-          <Space className="modal-action-row"><Button type="primary" htmlType="submit" disabled={!canManageUsers}>ä¿å­˜</Button><Button onClick={() => setOpen(false)}>å–æ¶ˆ</Button></Space>
+          <Space className="modal-action-row"><Button type="primary" htmlType="submit" disabled={!canManageUsers}>保存</Button><Button onClick={() => setOpen(false)}>取消</Button></Space>
         </Form>
       </Modal>
 
-      <Modal className="responsive-modal user-form-modal" title={`é‡ç½®å¯†ç ${resetUser ? `ï¼š${formatPersonName(resetUser.name)}` : ""}`} open={resetOpen} onCancel={() => setResetOpen(false)} footer={null} forceRender>
+      <Modal className="responsive-modal user-form-modal" title={`重置密码${resetUser ? `:${formatPersonName(resetUser.name)}` : ""}`} open={resetOpen} onCancel={() => setResetOpen(false)} footer={null} forceRender>
         <Form form={resetForm} layout="vertical" onFinish={resetPassword}>
-          <Form.Item name="password" label="æ–°å¯†ç " rules={[{ required: true, min: 8, message: "è‡³å°‘ 8 ä½" }]}><Input.Password /></Form.Item>
-          <Space className="modal-action-row"><Button type="primary" htmlType="submit" disabled={!canManageUsers}>ç¡®è®¤é‡ç½®</Button><Button onClick={() => setResetOpen(false)}>å–æ¶ˆ</Button></Space>
+          <Form.Item name="password" label="新密码" rules={[{ required: true, min: 8, message: "至少 8 位" }]}><Input.Password /></Form.Item>
+          <Space className="modal-action-row"><Button type="primary" htmlType="submit" disabled={!canManageUsers}>确认重置</Button><Button onClick={() => setResetOpen(false)}>取消</Button></Space>
         </Form>
       </Modal>
 
       <Modal
         className="responsive-modal user-permission-modal"
-        title={`æƒé™è¯¦æƒ…${permissionUser ? `ï¼š${formatPersonName(permissionUser.name)}` : ""}`}
+        title={`权限详情${permissionUser ? `:${formatPersonName(permissionUser.name)}` : ""}`}
         open={Boolean(permissionUser)}
         onCancel={() => setPermissionUser(null)}
-        footer={<Button onClick={() => setPermissionUser(null)}>å…³é—­</Button>}
+        footer={<Button onClick={() => setPermissionUser(null)}>关闭</Button>}
         width={720}
       >
         {permissionUser ? (
           <div className="permission-audit">
             <div className="permission-audit-head">
               <div>
-                <Typography.Text type="secondary">è´¦å·</Typography.Text>
+                <Typography.Text type="secondary">账号</Typography.Text>
                 <h3>{formatAccountName(permissionUser.username)}</h3>
               </div>
               <div>
-                <Typography.Text type="secondary">è§’è‰²</Typography.Text>
-                <h3>{formatOrgName(permissionUser.role_name) || "æœªç»‘å®šè§’è‰²"}</h3>
+                <Typography.Text type="secondary">角色</Typography.Text>
+                <h3>{formatOrgName(permissionUser.role_name) || "未绑定角色"}</h3>
               </div>
               <div>
-                <Typography.Text type="secondary">æ•°æ®èŒƒå›´</Typography.Text>
-                <h3>{dataScopeLabel[permissionUser.role_data_scope || ""] || "æœªè®¾ç½®"}</h3>
+                <Typography.Text type="secondary">数据范围</Typography.Text>
+                <h3>{dataScopeLabel[permissionUser.role_data_scope || ""] || "未设置"}</h3>
               </div>
             </div>
             <div className="permission-audit-meta">
-              <Tag>éƒ¨é—¨ï¼š{formatOrgName(permissionUser.department_name) || "æœªç»‘å®š"}</Tag>
-              <Tag>å¯è§é—¨åº—ï¼š{storeScopeText(permissionUser)}</Tag>
-              <Tag color={permissionUser.status === "active" ? "green" : "default"}>{permissionUser.status === "active" ? "å¯ç”¨" : "åœç”¨"}</Tag>
+              <Tag>部门:{formatOrgName(permissionUser.department_name) || "未绑定"}</Tag>
+              <Tag>可见门店:{storeScopeText(permissionUser)}</Tag>
+              <Tag color={permissionUser.status === "active" ? "green" : "default"}>{permissionUser.status === "active" ? "启用" : "停用"}</Tag>
             </div>
             <Table
               size="small"
@@ -473,9 +473,9 @@ export function UsersPage() {
                 permission: effectivePermission(permissionUser.role_permissions, item.key)
               }))}
               columns={[
-                { title: "æ¨¡å—", dataIndex: "module" },
+                { title: "模块", dataIndex: "module" },
                 {
-                  title: "æƒé™",
+                  title: "权限",
                   dataIndex: "permission",
                   render: (value: RolePermissionValue) => <Tag color={permissionColor[value]}>{permissionLabel[value]}</Tag>
                 }
@@ -489,16 +489,16 @@ export function UsersPage() {
 }
 
 function renderPermissionSummary(permissions?: PermissionMap) {
-  if (!permissions) return <Tag>æœªç»‘å®š</Tag>;
+  if (!permissions) return <Tag>未绑定</Tag>;
   const manageCount = permissionModules.filter((item) => permissions[item.key] === "manage").length;
   const readCount = permissionModules.filter((item) => permissions[item.key] === "read").length;
   const activeCount = permissionModules.filter((item) => permissions[item.key] && permissions[item.key] !== "none").length;
-  if (permissions.system === "manage") return <Tag color="gold">ç³»ç»Ÿç®¡ç†</Tag>;
+  if (permissions.system === "manage") return <Tag color="gold">系统管理</Tag>;
   return (
     <Space size={[4, 4]} wrap>
-      <Tag color="green">ç®¡ç† {manageCount}</Tag>
-      <Tag color="blue">åªè¯» {readCount}</Tag>
-      <Tag>å¯ç”¨ {activeCount}</Tag>
+      <Tag color="green">管理 {manageCount}</Tag>
+      <Tag color="blue">只读 {readCount}</Tag>
+      <Tag>启用 {activeCount}</Tag>
     </Space>
   );
 }
@@ -512,76 +512,76 @@ function effectivePermission(permissions: PermissionMap | undefined, module: str
 function getDepartmentRoleGuide(hasDepartment: boolean, roleCount: number) {
   if (!hasDepartment) {
     return {
-      title: "å…ˆé€‰éƒ¨é—¨ï¼Œå†é€‰è§’è‰²",
-      description: "æœªé€‰æ‹©éƒ¨é—¨æ—¶ä¸å¼€æ”¾è§’è‰²å’Œå¯è§é—¨åº—é…ç½®ï¼Œé¿å…äººå‘˜æƒé™å½’å±žä¸æ¸…ã€‚"
+      title: "先选部门,再选角色",
+      description: "未选择部门时不开放角色和可见门店配置,避免人员权限归属不清。"
     };
   }
   if (!roleCount) {
     return {
-      title: "è¯¥éƒ¨é—¨è¿˜æ²¡æœ‰é…ç½®å¯åˆ†é…è§’è‰²",
-      description: "è¯·å…ˆåˆ°ç»„ç»‡æž¶æž„é¡µä¸ºè¯¥éƒ¨é—¨é…ç½®å¯ç”¨è§’è‰²ï¼Œå†å›žæ¥æ–°å¢žæˆ–ç¼–è¾‘äººå‘˜ã€‚"
+      title: "该部门还没有配置可分配角色",
+      description: "请先到组织架构页为该部门配置可用角色,再回来新增或编辑人员。"
     };
   }
   return {
-    title: `å·²é€‰æ‹©éƒ¨é—¨ï¼Œå¯åˆ†é… ${roleCount} ä¸ªè§’è‰²`,
-    description: "è§’è‰²å†³å®šæ¨¡å—æƒé™å’Œæ•°æ®èŒƒå›´ï¼›éƒ¨é—¨å†³å®šäººå‘˜å½’å±žå’ŒåŽç»­éƒ¨é—¨ç®¡ç†ã€‚"
+    title: `已选择部门,可分配 ${roleCount} 个角色`,
+    description: "角色决定模块权限和数据范围;部门决定人员归属和后续部门管理。"
   };
 }
 
 function getStoreScopeHint(role: OptionRecord | null) {
   if (!role) {
     return {
-      title: "å…ˆé€‰æ‹©è§’è‰²ï¼Œå†é…ç½®é—¨åº—èŒƒå›´",
-      description: "è§’è‰²å†³å®šæ•°æ®èŒƒå›´ï¼›æœªé€‰æ‹©è§’è‰²æ—¶ä¸éœ€è¦é…ç½®å¯è§é—¨åº—ã€‚",
-      placeholder: "è¯·å…ˆé€‰æ‹©è§’è‰²"
+      title: "先选择角色,再配置门店范围",
+      description: "角色决定数据范围;未选择角色时不需要配置可见门店。",
+      placeholder: "请先选择角色"
     };
   }
   const scope = role.data_scope || "all";
   if (scope === "all") {
     return {
-      title: "è¯¥è§’è‰²å¯æŸ¥çœ‹å…¨éƒ¨é—¨åº—",
-      description: "å…¨éƒ¨æ•°æ®è§’è‰²ä¸éœ€è¦å•ç‹¬é…ç½®å¯è§é—¨åº—ï¼Œä¿å­˜æ—¶ç³»ç»Ÿä¼šè‡ªåŠ¨æ¸…ç©ºé—¨åº—èŒƒå›´ã€‚",
-      placeholder: "å…¨éƒ¨é—¨åº—è‡ªåŠ¨å¯è§"
+      title: "该角色可查看全部门店",
+      description: "全部数据角色不需要单独配置可见门店,保存时系统会自动清空门店范围。",
+      placeholder: "全部门店自动可见"
     };
   }
   if (scope === "single_store") {
     return {
-      title: "è¯¥è§’è‰²å¿…é¡»ç»‘å®š 1 å®¶é—¨åº—",
-      description: "åº—é•¿æˆ–å•åº—è´Ÿè´£äººåªèƒ½çœ‹åˆ°æ‰€ç»‘å®šé—¨åº—çš„æ•°æ®å’Œä»»åŠ¡ã€‚",
-      placeholder: "è¯·é€‰æ‹© 1 å®¶é—¨åº—"
+      title: "该角色必须绑定 1 家门店",
+      description: "店长或单店负责人只能看到所绑定门店的数据和任务。",
+      placeholder: "请选择 1 家门店"
     };
   }
   if (scope === "multi_store") {
     return {
-      title: "ç£å¯¼/åŒºåŸŸè´Ÿè´£äººéœ€ç»‘å®šå¤šå®¶ç®¡è¾–é—¨åº—",
-      description: "ç£å¯¼å·¥ä½œå°ã€ä»»åŠ¡ã€é¢„è­¦ã€èˆ†æƒ…ã€ç¤¾åª’å†…å®¹å’Œæ—¥æŠ¥ä¼šæŒ‰è¿™é‡Œé€‰æ‹©çš„é—¨åº—è¿‡æ»¤ã€‚",
-      placeholder: "é€‰æ‹©ç£å¯¼è´Ÿè´£çš„å¤šå®¶é—¨åº—"
+      title: "督导/区域负责人需绑定多家管辖门店",
+      description: "督导工作台、任务、预警、舆情、社媒内容和日报会按这里选择的门店过滤。",
+      placeholder: "选择督导负责的多家门店"
     };
   }
   if (scope === "dept") {
     return {
-      title: "æœ¬éƒ¨é—¨è§’è‰²ä»éœ€è¦é…ç½®å¯è§é—¨åº—",
-      description: "å½“å‰åŽç«¯æŒ‰å¯è§é—¨åº—é›†åˆè¿‡æ»¤ç»è¥æ•°æ®ï¼›éƒ¨é—¨ç”¨äºŽç»„ç»‡å½’å±žå’Œäººå‘˜ç®¡ç†ã€‚",
-      placeholder: "é€‰æ‹©è¯¥éƒ¨é—¨äººå‘˜å¯æŸ¥çœ‹çš„é—¨åº—"
+      title: "本部门角色仍需要配置可见门店",
+      description: "当前后端按可见门店集合过滤经营数据;部门用于组织归属和人员管理。",
+      placeholder: "选择该部门人员可查看的门店"
     };
   }
   return {
-    title: `${dataScopeLabel[scope] || "å—é™èŒƒå›´"}è§’è‰²éœ€è¦é…ç½®å¯è§é—¨åº—`,
-    description: "ç£å¯¼ã€åŒºåŸŸã€æ¸ é“ã€åŠ ç›Ÿå•†ç­‰éžå…¨é‡è§’è‰²ï¼Œç»è¥æ•°æ®ä¼šæŒ‰è¿™é‡Œé€‰æ‹©çš„é—¨åº—è¿‡æ»¤ã€‚",
-    placeholder: "é€‰æ‹©è¯¥äººå‘˜å¯æŸ¥çœ‹çš„é—¨åº—"
+    title: `${dataScopeLabel[scope] || "受限范围"}角色需要配置可见门店`,
+    description: "督导、区域、渠道、加盟商等非全量角色,经营数据会按这里选择的门店过滤。",
+    placeholder: "选择该人员可查看的门店"
   };
 }
 
 function storeScopeText(record: UserRecord) {
-  if (record.role_data_scope === "all") return "å…¨éƒ¨é—¨åº—";
-  if (record.store_scope_names?.length) return record.store_scope_names.map(formatStoreName).join("ã€");
-  if (!record.role_id) return "æœªç»‘å®šè§’è‰²";
-  return "æœªé…ç½®";
+  if (record.role_data_scope === "all") return "全部门店";
+  if (record.store_scope_names?.length) return record.store_scope_names.map(formatStoreName).join("、");
+  if (!record.role_id) return "未绑定角色";
+  return "未配置";
 }
 
 function renderStoreScope(record: UserRecord) {
-  if (record.role_data_scope === "all") return <Tag color="gold">å…¨éƒ¨é—¨åº—</Tag>;
-  if (record.store_scope_names?.length) return record.store_scope_names.map(formatStoreName).join("ã€");
-  return <Tag color="red">æœªé…ç½®</Tag>;
+  if (record.role_data_scope === "all") return <Tag color="gold">全部门店</Tag>;
+  if (record.store_scope_names?.length) return record.store_scope_names.map(formatStoreName).join("、");
+  return <Tag color="red">未配置</Tag>;
 }
 

@@ -199,7 +199,7 @@ export function ProductsPage() {
       setProducts(productRes.data);
       setCategories(categoryRes.data);
     } catch {
-      message.error("产品数据加载失败，请确认后端服务和登录状态");
+      message.error("产品数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -309,7 +309,7 @@ export function ProductsPage() {
       });
       setRecipeOpen(true);
     } catch {
-      message.error("原料档案加载失败，无法维护配方");
+      message.error("原料档案加载失败,无法维护配方");
     }
   }
 
@@ -332,7 +332,7 @@ export function ProductsPage() {
       setRecipeOpen(false);
       await loadProductLibrary(preview.id);
     } catch {
-      message.error("配方保存失败，请检查原料、用量和单位");
+      message.error("配方保存失败,请检查原料、用量和单位");
     } finally {
       setLibrarySaving(false);
     }
@@ -386,7 +386,7 @@ export function ProductsPage() {
       setAssetOpen(false);
       await loadProductLibrary(preview.id);
     } catch {
-      message.error("素材登记失败，请检查类型和文件地址");
+      message.error("素材登记失败,请检查类型和文件地址");
     } finally {
       setLibrarySaving(false);
     }
@@ -432,7 +432,7 @@ export function ProductsPage() {
       form.resetFields();
       await load();
     } catch {
-      message.error("产品保存失败，请检查 SKU 是否重复或字段是否完整");
+      message.error("产品保存失败,请检查 SKU 是否重复或字段是否完整");
     } finally {
       setSaving(false);
     }
@@ -462,7 +462,7 @@ export function ProductsPage() {
       message.success("产品图已上传");
       options.onSuccess?.(res.data);
     } catch {
-      message.error("产品图上传失败，请稍后重试");
+      message.error("产品图上传失败,请稍后重试");
       options.onError?.(new Error("upload failed"));
     }
   }
@@ -500,7 +500,7 @@ export function ProductsPage() {
       setEditingCategory(null);
       await load();
     } catch {
-      message.error("分类保存失败，请检查是否已存在同名分类");
+      message.error("分类保存失败,请检查是否已存在同名分类");
     } finally {
       setCategorySaving(false);
     }
@@ -612,7 +612,7 @@ export function ProductsPage() {
                       </div>
                       <b>{formatMoney(record.price)}</b>
                     </div>
-                    <p>{record.description || "暂未维护产品说明，可补充口味、卖点和门店出品要点。"}</p>
+                    <p>{record.description || "暂未维护产品说明,可补充口味、卖点和门店出品要点。"}</p>
                     <div className="product-card-metrics">
                       <span>成本 <b>{formatMoney(record.cost)}</b></span>
                       <span>毛利率 <b>{formatMargin(record.margin_rate)}</b></span>
@@ -633,7 +633,7 @@ export function ProductsPage() {
             })}
           </div>
         ) : (
-          <Empty description="暂无产品档案，请先新增 SKU" />
+          <Empty description="暂无产品档案,请先新增 SKU" />
         )}
       </Card>
 
@@ -690,7 +690,7 @@ export function ProductsPage() {
                   {preview.ai_tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
                 </div>
               ) : (
-                <div className="product-detail-empty">暂未维护运营标签，可用于看板筛选、AI 摘要和产品分析归因。</div>
+                <div className="product-detail-empty">暂未维护运营标签,可用于看板筛选、AI 摘要和产品分析归因。</div>
               )}
             </section>
 
@@ -706,7 +706,7 @@ export function ProductsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="product-detail-empty">暂无产品图。建议上传清晰封面图，便于门店识别和产品分析展示。</div>
+                <div className="product-detail-empty">暂无产品图。建议上传清晰封面图,便于门店识别和产品分析展示。</div>
               )}
             </section>
 
@@ -783,9 +783,9 @@ export function ProductsPage() {
               </Typography.Paragraph>
               {!preview.social_rules ? (
                 <ul className="product-manual-suggestion">
-                  <li>制作参数：茶汤、糖度、冰量、出杯步骤。</li>
-                  <li>出品标准：杯型、装饰、封口和交付检查。</li>
-                  <li>跟进重点：缺料替代、客诉高发点、禁用场景。</li>
+                  <li>制作参数:茶汤、糖度、冰量、出杯步骤。</li>
+                  <li>出品标准:杯型、装饰、封口和交付检查。</li>
+                  <li>跟进重点:缺料替代、客诉高发点、禁用场景。</li>
                 </ul>
               ) : null}
             </section>
@@ -825,7 +825,7 @@ export function ProductsPage() {
             <Form.Item name="price" label="售价"><InputNumber min={0} precision={2} style={{ width: "100%" }} /></Form.Item>
             <Form.Item name="cost" label="成本"><InputNumber min={0} precision={2} style={{ width: "100%" }} /></Form.Item>
           </div>
-          <Form.Item name="ai_tags" label="运营标签"><Select mode="tags" tokenSeparators={[",", "，"]} placeholder="例如：招牌、低糖、热销" /></Form.Item>
+          <Form.Item name="ai_tags" label="运营标签"><Select mode="tags" tokenSeparators={[",", ","]} placeholder="例如:招牌、低糖、热销" /></Form.Item>
           <Form.Item name="description" label="产品说明"><Input.TextArea rows={3} /></Form.Item>
           <Form.Item name="image_urls_text" hidden><Input.TextArea /></Form.Item>
           <Form.Item label="产品图">
@@ -838,7 +838,7 @@ export function ProductsPage() {
             >
               <p className="product-upload-icon"><UploadOutlined /></p>
               <p className="product-upload-title">上传产品图</p>
-              <p className="product-upload-hint">支持 JPG、PNG、WebP，单张不超过 5MB。建议上传正方形或 4:3 产品图。</p>
+              <p className="product-upload-hint">支持 JPG、PNG、WebP,单张不超过 5MB。建议上传正方形或 4:3 产品图。</p>
             </Upload.Dragger>
             {editingImageUrls.length ? (
               <div className="product-edit-image-grid">
@@ -852,7 +852,7 @@ export function ProductsPage() {
                 ))}
               </div>
             ) : (
-              <div className="product-upload-empty">还没有产品图，上传后会显示在产品列表和详情页。</div>
+              <div className="product-upload-empty">还没有产品图,上传后会显示在产品列表和详情页。</div>
             )}
           </Form.Item>
           <Form.Item name="social_rules" label="操作手册">
@@ -926,7 +926,7 @@ export function ProductsPage() {
             <Upload.Dragger customRequest={uploadProductAsset} multiple={false} showUploadList={false} disabled={!canManageAssets}>
               <p className="product-upload-icon"><UploadOutlined /></p>
               <p className="product-upload-title">上传产品素材</p>
-              <p className="product-upload-hint">支持图片、PDF、Word、Excel，单个文件不超过 20MB。</p>
+              <p className="product-upload-hint">支持图片、PDF、Word、Excel,单个文件不超过 20MB。</p>
             </Upload.Dragger>
           </Form.Item>
           <Form.Item name="asset_type" label="素材类型" rules={[{ required: true, message: "请选择素材类型" }]}>
@@ -942,7 +942,7 @@ export function ProductsPage() {
             <Input />
           </Form.Item>
           <Form.Item name="usage_scope" label="使用范围">
-            <Input placeholder="例如：外卖平台、小红书、门店海报" />
+            <Input placeholder="例如:外卖平台、小红书、门店海报" />
           </Form.Item>
           <Space>
             <Button type="primary" htmlType="submit" disabled={!canManageAssets} loading={librarySaving}>登记素材</Button>
@@ -981,9 +981,9 @@ export function ProductsPage() {
             name="name"
             label="分类名称"
             rules={[{ required: true, message: "请输入分类名称" }]}
-            extra="分类会进入产品表单下拉和产品分类筛选，不再在产品表单里临时输入。"
+            extra="分类会进入产品表单下拉和产品分类筛选,不再在产品表单里临时输入。"
           >
-            <Input placeholder="例如：轻乳茶、热饮、周边" />
+            <Input placeholder="例如:轻乳茶、热饮、周边" />
           </Form.Item>
           <Form.Item name="status" label="状态">
             <Select options={categoryStatusOptions} />

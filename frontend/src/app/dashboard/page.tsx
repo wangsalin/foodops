@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   Alert,
@@ -30,7 +30,7 @@ import { api } from "@/lib/api";
 
 const ReactECharts = dynamic(() => import("echarts-for-react"), {
   ssr: false,
-  loading: () => <div className="chart-loading">å›¾è¡¨åŠ è½½ä¸­</div>
+  loading: () => <div className="chart-loading">图表加载中</div>
 });
 
 type Overview = {
@@ -149,7 +149,7 @@ const emptyOverview: Overview = {
     ai_alerts_month: 0,
     saved_hours_month: 0
   },
-  summary: "æš‚æ— ç»è¥æ•°æ®ã€‚è¯·å…ˆå®Œæˆæ•°æ®å¯¼å…¥ã€‚"
+  summary: "暂无经营数据。请先完成数据导入。"
 };
 
 const emptyTrends: TrendResponse = {
@@ -160,64 +160,64 @@ const emptyTrends: TrendResponse = {
 };
 
 const channelLabel: Record<string, string> = {
-  meituan: "ç¾Žå›¢",
-  eleme: "é¥¿äº†ä¹ˆ",
-  miniapp: "å°ç¨‹åº",
-  dine_in: "å ‚é£Ÿ",
-  group_buy: "å›¢è´­",
-  offline: "çº¿ä¸‹"
+  meituan: "美团",
+  eleme: "饿了么",
+  miniapp: "小程序",
+  dine_in: "堂食",
+  group_buy: "团购",
+  offline: "线下"
 };
 
 const alertTypeLabel: Record<string, string> = {
-  sales_drop: "é”€å”®ä¸‹æ»‘",
-  inventory_risk: "åº“å­˜é£Žé™©",
-  bad_review: "è¯„ä»·å¼‚å¸¸",
+  sales_drop: "销售下滑",
+  inventory_risk: "库存风险",
+  bad_review: "评价异常",
 };
 
 const alertLevelLabel: Record<string, string> = {
-  critical: "ä¸¥é‡",
-  high: "é«˜é£Žé™©",
-  warning: "é¢„è­¦",
-  medium: "ä¸­é£Žé™©",
-  low: "ä½Žé£Žé™©",
-  normal: "æ™®é€š"
+  critical: "严重",
+  high: "高风险",
+  warning: "预警",
+  medium: "中风险",
+  low: "低风险",
+  normal: "普通"
 };
 
 const targetTypeLabel: Record<string, string> = {
-  alert: "é¢„è­¦",
-  task: "ä»»åŠ¡",
+  alert: "预警",
+  task: "任务",
   ai: "AI",
-  system: "ç³»ç»Ÿ"
+  system: "系统"
 };
 
 function formatMoney(value: number) {
-  return `Â¥${value.toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `¥${value.toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function formatDate(value?: string | null) {
-  if (!value) return "æš‚æ— ";
+  if (!value) return "暂无";
   return value.slice(0, 10);
 }
 
 function formatStoreName(value?: string | null) {
-  if (!value) return "æœªå…³è”é—¨åº—";
-  if (/^Scope Store/i.test(value)) return "æµ‹è¯•é—¨åº—";
+  if (!value) return "未关联门店";
+  if (/^Scope Store/i.test(value)) return "测试门店";
   return value;
 }
 
 function formatAlertTitle(value?: string | null) {
-  if (!value) return "æœªå‘½åé¢„è­¦";
-  if (/^codex[-_]/i.test(value)) return "ç³»ç»ŸéªŒæ”¶é¢„è­¦";
+  if (!value) return "未命名预警";
+  if (/^codex[-_]/i.test(value)) return "系统验收预警";
   return sanitizeBusinessText(value);
 }
 
 function sanitizeBusinessText(value?: string | null) {
   if (!value) return "";
   return value
-    .replaceAll("Codex", "ç³»ç»ŸéªŒæ”¶")
-    .replaceAll("Critical", "ä¸¥é‡")
-    .replaceAll("critical", "ä¸¥é‡")
-    .replaceAll("high", "é«˜é£Žé™©");
+    .replaceAll("Codex", "系统验收")
+    .replaceAll("Critical", "严重")
+    .replaceAll("critical", "严重")
+    .replaceAll("high", "高风险");
 }
 
 function activityHref(record: NotificationRecord) {
@@ -279,7 +279,7 @@ export default function DashboardPage() {
       setTrends(trendRes.data);
       setNotifications(notificationRes.data);
     } catch {
-      message.error("ç»è¥çœ‹æ¿æ•°æ®åŠ è½½å¤±è´¥ï¼Œè¯·ç¡®è®¤åŽç«¯æœåŠ¡å’Œç™»å½•çŠ¶æ€");
+      message.error("经营看板数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -292,56 +292,56 @@ export default function DashboardPage() {
   const metrics = overview.metrics;
   const closedTotal = metrics.closed_tasks + metrics.pending_tasks;
   const closureRate = closedTotal ? Math.round((metrics.closed_tasks / closedTotal) * 100) : 0;
-  const selectedStoreName = filters.stores.find((item) => item.id === selectedStore)?.name || "å…¨éƒ¨å¯è§é—¨åº—";
+  const selectedStoreName = filters.stores.find((item) => item.id === selectedStore)?.name || "全部可见门店";
 
   const kpis = [
     {
       key: "revenue",
       icon: <DollarOutlined />,
-      title: "æœ€æ–°è¥æ”¶",
+      title: "最新营收",
       value: formatMoney(metrics.revenue),
-      note: `è¾ƒä¸Šä¸€è¥ä¸šæ—¥ ${metrics.revenue_delta_pct >= 0 ? "+" : ""}${metrics.revenue_delta_pct}%`,
+      note: `较上一营业日 ${metrics.revenue_delta_pct >= 0 ? "+" : ""}${metrics.revenue_delta_pct}%`,
       tone: metrics.revenue_delta_pct >= 0 ? "good" : "danger"
     },
     {
       key: "orders",
       icon: <LineChartOutlined />,
-      title: "è®¢å•é‡",
+      title: "订单量",
       value: metrics.orders.toLocaleString("zh-CN"),
-      note: `å®¢å•ä»· ${formatMoney(metrics.avg_order)}`,
+      note: `客单价 ${formatMoney(metrics.avg_order)}`,
       tone: "neutral"
     },
     {
       key: "alerts",
       icon: <AlertOutlined />,
-      title: "å¼€æ”¾é¢„è­¦",
-      value: `${metrics.open_alerts} æ¡`,
-      note: `ä¸¥é‡ ${metrics.critical_alerts} æ¡`,
+      title: "开放预警",
+      value: `${metrics.open_alerts} 条`,
+      note: `严重 ${metrics.critical_alerts} 条`,
       tone: metrics.critical_alerts > 0 ? "danger" : "warn"
     },
     {
       key: "tasks",
       icon: <CheckCircleOutlined />,
-      title: "ä»»åŠ¡é—­çŽ¯",
+      title: "任务闭环",
       value: `${closureRate}%`,
-      note: `å¾…å¤„ç† ${metrics.pending_tasks} ä¸ªï¼Œå·²é—­çŽ¯ ${metrics.closed_tasks} ä¸ª`,
+      note: `待处理 ${metrics.pending_tasks} 个,已闭环 ${metrics.closed_tasks} 个`,
       tone: metrics.pending_tasks > 0 ? "warn" : "good",
       progress: closureRate
     },
     {
       key: "imports",
       icon: <CloudUploadOutlined />,
-      title: "ä»Šæ—¥å¯¼å…¥",
-      value: `${metrics.today_imports} æ¬¡`,
-      note: "å¯¼å…¥åŽè‡ªåŠ¨è§¦å‘ V1 é¢„è­¦è§„åˆ™",
+      title: "今日导入",
+      value: `${metrics.today_imports} 次`,
+      note: "导入后自动触发 V1 预警规则",
       tone: "neutral"
     },
     {
       key: "ai",
       icon: <ThunderboltOutlined />,
-      title: "AI æ‘˜è¦",
-      value: `${metrics.ai_reports_month} ä»½`,
-      note: `æœ¬æœˆèŠ‚çœçº¦ ${metrics.saved_hours_month} å°æ—¶`,
+      title: "AI 摘要",
+      value: `${metrics.ai_reports_month} 份`,
+      note: `本月节省约 ${metrics.saved_hours_month} 小时`,
       tone: "good"
     }
   ];
@@ -367,20 +367,20 @@ export default function DashboardPage() {
       yAxis: [
         {
           type: "value",
-          name: "è¥æ”¶",
-          axisLabel: { formatter: "Â¥{value}" },
+          name: "营收",
+          axisLabel: { formatter: "¥{value}" },
           splitLine: { lineStyle: { color: "rgba(219, 228, 238, 0.75)" } }
         },
         {
           type: "value",
-          name: "æ•°é‡",
+          name: "数量",
           axisLabel: { margin: 12 },
           splitLine: { show: false }
         }
       ],
       series: [
         {
-          name: selectedChannel ? `${channelLabel[selectedChannel] || selectedChannel}è¥æ”¶` : "è¥æ”¶",
+          name: selectedChannel ? `${channelLabel[selectedChannel] || selectedChannel}营收` : "营收",
           type: "line",
           smooth: true,
           yAxisIndex: 0,
@@ -390,7 +390,7 @@ export default function DashboardPage() {
           data: trends.points.map((item) => item.revenue)
         },
         {
-          name: "è®¢å•",
+          name: "订单",
           type: "bar",
           yAxisIndex: 1,
           barMaxWidth: 18,
@@ -398,7 +398,7 @@ export default function DashboardPage() {
           data: trends.points.map((item) => item.orders)
         },
         {
-          name: "é¢„è­¦",
+          name: "预警",
           type: "line",
           yAxisIndex: 1,
           smooth: true,
@@ -407,7 +407,7 @@ export default function DashboardPage() {
           data: trends.points.map((item) => item.alerts)
         },
         {
-          name: "ä»»åŠ¡",
+          name: "任务",
           type: "line",
           yAxisIndex: 1,
           smooth: true,
@@ -421,30 +421,30 @@ export default function DashboardPage() {
   );
 
   const exportDashboardCsv = useCallback(() => {
-    const channelName = selectedChannel ? channelLabel[selectedChannel] || selectedChannel : "å…¨éƒ¨æ¸ é“";
+    const channelName = selectedChannel ? channelLabel[selectedChannel] || selectedChannel : "全部渠道";
     const rows: unknown[][] = [
-      ["æ¨¡å—", "æŒ‡æ ‡", "å€¼", "å¤‡æ³¨"],
-      ["ç»è¥æ¦‚è§ˆ", "æœ€æ–°è¥ä¸šæ—¥", formatDate(overview.period.latest_sales_date), selectedStoreName],
-      ["ç»è¥æ¦‚è§ˆ", "æœ€æ–°è¥æ”¶", metrics.revenue, `è¾ƒä¸Šä¸€è¥ä¸šæ—¥ ${metrics.revenue_delta_pct}%`],
-      ["ç»è¥æ¦‚è§ˆ", "è®¢å•é‡", metrics.orders, `å®¢å•ä»· ${metrics.avg_order}`],
-      ["ç»è¥æ¦‚è§ˆ", "å¼€æ”¾é¢„è­¦", metrics.open_alerts, `ä¸¥é‡ ${metrics.critical_alerts} æ¡`],
-      ["ç»è¥æ¦‚è§ˆ", "ä»»åŠ¡é—­çŽ¯çŽ‡", `${closureRate}%`, `å¾…å¤„ç† ${metrics.pending_tasks} ä¸ªï¼Œå·²é—­çŽ¯ ${metrics.closed_tasks} ä¸ª`],
-      ["ç»è¥æ¦‚è§ˆ", "AI æ‘˜è¦", metrics.ai_reports_month, `æœ¬æœˆèŠ‚çœçº¦ ${metrics.saved_hours_month} å°æ—¶`],
-      ["AI ä»Šæ—¥æ‘˜è¦", "ç»è¥æ‘˜è¦", overview.summary, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "ç­›é€‰é—¨åº—", selectedStoreName, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "ç­›é€‰æ¸ é“", channelName, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "å‘¨æœŸ", `${formatDate(trends.period.start_date)} è‡³ ${formatDate(trends.period.end_date)}`, `è¿‘ ${selectedDays} å¤©`],
-      ["è¶‹åŠ¿æ±‡æ€»", "å‘¨æœŸè¥æ”¶", trends.totals.revenue, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "å‘¨æœŸè®¢å•", trends.totals.orders, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "æ–°å¢žé¢„è­¦", trends.totals.alerts, ""],
-      ["è¶‹åŠ¿æ±‡æ€»", "æ–°å¢žä»»åŠ¡", trends.totals.tasks, ""],
+      ["模块", "指标", "值", "备注"],
+      ["经营概览", "最新营业日", formatDate(overview.period.latest_sales_date), selectedStoreName],
+      ["经营概览", "最新营收", metrics.revenue, `较上一营业日 ${metrics.revenue_delta_pct}%`],
+      ["经营概览", "订单量", metrics.orders, `客单价 ${metrics.avg_order}`],
+      ["经营概览", "开放预警", metrics.open_alerts, `严重 ${metrics.critical_alerts} 条`],
+      ["经营概览", "任务闭环率", `${closureRate}%`, `待处理 ${metrics.pending_tasks} 个,已闭环 ${metrics.closed_tasks} 个`],
+      ["经营概览", "AI 摘要", metrics.ai_reports_month, `本月节省约 ${metrics.saved_hours_month} 小时`],
+      ["AI 今日摘要", "经营摘要", overview.summary, ""],
+      ["趋势汇总", "筛选门店", selectedStoreName, ""],
+      ["趋势汇总", "筛选渠道", channelName, ""],
+      ["趋势汇总", "周期", `${formatDate(trends.period.start_date)} 至 ${formatDate(trends.period.end_date)}`, `近 ${selectedDays} 天`],
+      ["趋势汇总", "周期营收", trends.totals.revenue, ""],
+      ["趋势汇总", "周期订单", trends.totals.orders, ""],
+      ["趋势汇总", "新增预警", trends.totals.alerts, ""],
+      ["趋势汇总", "新增任务", trends.totals.tasks, ""],
       [],
-      ["è¶‹åŠ¿æ˜Žç»†", "æ—¥æœŸ", "è¥æ”¶", "è®¢å•", "é¢„è­¦", "ä»»åŠ¡"],
-      ...trends.points.map((item) => ["è¶‹åŠ¿æ˜Žç»†", item.biz_date, item.revenue, item.orders, item.alerts, item.tasks]),
+      ["趋势明细", "日期", "营收", "订单", "预警", "任务"],
+      ...trends.points.map((item) => ["趋势明细", item.biz_date, item.revenue, item.orders, item.alerts, item.tasks]),
       [],
-      ["é¢„è­¦é˜Ÿåˆ—", "é—¨åº—", "ç±»åž‹", "æ ‡é¢˜", "ç­‰çº§", "çŠ¶æ€"],
+      ["预警队列", "门店", "类型", "标题", "等级", "状态"],
       ...alerts.map((item) => [
-        "é¢„è­¦é˜Ÿåˆ—",
+        "预警队列",
         formatStoreName(item.store_name),
         alertTypeLabel[item.alert_type] || item.alert_type,
         formatAlertTitle(item.title),
@@ -452,8 +452,8 @@ export default function DashboardPage() {
         item.status
       ]),
       [],
-      ["æ¸ é“è¡¨çŽ°", "æ¸ é“", "è¥æ”¶", "å æ¯”"],
-      ...channels.map((item) => ["æ¸ é“è¡¨çŽ°", channelLabel[item.channel] || item.channel, item.revenue, `${item.percent}%`])
+      ["渠道表现", "渠道", "营收", "占比"],
+      ...channels.map((item) => ["渠道表现", channelLabel[item.channel] || item.channel, item.revenue, `${item.percent}%`])
     ];
     downloadCsv(`foodops-dashboard-${new Date().toISOString().slice(0, 10)}.csv`, rows);
   }, [alerts, channels, closureRate, metrics, overview, selectedChannel, selectedDays, selectedStoreName, trends]);
@@ -475,9 +475,9 @@ export default function DashboardPage() {
       loading={loading}
       title={
         <div className="dashboard-section-title">
-          <span>ç»è¥è¶‹åŠ¿</span>
+          <span>经营趋势</span>
           <small>
-            {selectedStoreName} Â· {formatDate(trends.period.start_date)} è‡³ {formatDate(trends.period.end_date)}
+            {selectedStoreName} · {formatDate(trends.period.start_date)} 至 {formatDate(trends.period.end_date)}
           </small>
         </div>
       }
@@ -486,7 +486,7 @@ export default function DashboardPage() {
           <Select
             allowClear
             showSearch
-            placeholder="å…¨éƒ¨é—¨åº—"
+            placeholder="全部门店"
             optionFilterProp="label"
             value={selectedStore}
             onChange={setSelectedStore}
@@ -494,7 +494,7 @@ export default function DashboardPage() {
           />
           <Select
             allowClear
-            placeholder="å…¨éƒ¨æ¸ é“"
+            placeholder="全部渠道"
             value={selectedChannel}
             onChange={setSelectedChannel}
             options={filters.channels.map((item) => ({
@@ -505,7 +505,7 @@ export default function DashboardPage() {
           <Select
             value={selectedDays}
             onChange={setSelectedDays}
-            options={filters.day_options.map((item) => ({ value: item, label: `è¿‘ ${item} å¤©` }))}
+            options={filters.day_options.map((item) => ({ value: item, label: `近 ${item} 天` }))}
           />
         </div>
       }
@@ -513,95 +513,95 @@ export default function DashboardPage() {
       {trends.points.length ? (
         <>
           <div className="dashboard-trend-summary">
-            <span>å‘¨æœŸè¥æ”¶ {formatMoney(trends.totals.revenue)}</span>
-            <span>è®¢å• {trends.totals.orders} ç¬”</span>
-            <span>æ–°å¢žé¢„è­¦ {trends.totals.alerts} æ¡</span>
-            <span>æ–°å¢žä»»åŠ¡ {trends.totals.tasks} ä¸ª</span>
+            <span>周期营收 {formatMoney(trends.totals.revenue)}</span>
+            <span>订单 {trends.totals.orders} 笔</span>
+            <span>新增预警 {trends.totals.alerts} 条</span>
+            <span>新增任务 {trends.totals.tasks} 个</span>
           </div>
           <ReactECharts option={trendOption} style={{ height: 286 }} />
           <div className="dashboard-chart-note">
-            å£å¾„ï¼šè¥æ”¶å’Œè®¢å•æ¥è‡ªé—¨åº—æ—¥é”€å”®æ±‡æ€»ï¼›é¢„è­¦å’Œä»»åŠ¡æŒ‰åˆ›å»ºæ—¥æœŸç»Ÿè®¡ï¼›é€‰æ‹©æ¸ é“æ—¶ä»…åˆ‡æ¢è¥æ”¶å£å¾„ï¼Œè®¢å•ä»ä¸ºé—¨åº—æ€»è®¢å•ã€‚
+            口径:营收和订单来自门店日销售汇总;预警和任务按创建日期统计;选择渠道时仅切换营收口径,订单仍为门店总订单。
           </div>
         </>
       ) : (
-        <Empty description="æš‚æ— è¶‹åŠ¿æ•°æ®ï¼Œè¯·å…ˆå¯¼å…¥é—¨åº—æ—¥é”€å”®æ±‡æ€»" />
+        <Empty description="暂无趋势数据,请先导入门店日销售汇总" />
       )}
     </Card>
   );
 
   const dashboardClosureCard = (
-    <Card className="panel-card dashboard-closure-card" title="é—­çŽ¯çŠ¶æ€" loading={loading}>
+    <Card className="panel-card dashboard-closure-card" title="闭环状态" loading={loading}>
       <div className="closure-ring">
         <Progress type="circle" percent={closureRate} size={118} strokeColor="#569435" />
         <div>
           <b>{metrics.pending_tasks}</b>
-          <span>ä¸ªä»»åŠ¡å¾…å¤„ç†</span>
+          <span>个任务待处理</span>
         </div>
       </div>
       <div className="closure-steps">
         <div>
-          <span>å¯¼å…¥</span>
+          <span>导入</span>
           <strong>{metrics.today_imports}</strong>
         </div>
         <div>
-          <span>é¢„è­¦</span>
+          <span>预警</span>
           <strong>{metrics.open_alerts}</strong>
         </div>
         <div>
-          <span>é—­çŽ¯</span>
+          <span>闭环</span>
           <strong>{metrics.closed_tasks}</strong>
         </div>
       </div>
       <Button block onClick={() => router.push("/tasks")} icon={<ArrowRightOutlined />}>
-        è¿›å…¥ä»»åŠ¡ä¸­å¿ƒ
+        进入任务中心
       </Button>
     </Card>
   );
 
   const dashboardRiskCard = (
-    <Card className="panel-card dashboard-risk-card" title="é«˜é£Žé™©é—¨åº—" loading={loading}>
+    <Card className="panel-card dashboard-risk-card" title="高风险门店" loading={loading}>
       {riskStores.length ? (
         <div className="risk-list">
           {riskStores.slice(0, 4).map((item) => (
             <button className="risk-item store-risk-button" key={item.id} onClick={() => router.push(`/analysis/stores?store_id=${item.id}`)}>
               <div>
                 <div className="risk-title">{formatStoreName(item.store_name)}</div>
-                <div className="risk-meta">{item.latest_reason ? formatAlertTitle(item.latest_reason) : `å¼€æ”¾é¢„è­¦ ${item.alert_count} æ¡`}</div>
+                <div className="risk-meta">{item.latest_reason ? formatAlertTitle(item.latest_reason) : `开放预警 ${item.alert_count} 条`}</div>
               </div>
-              <Tag color={item.max_level === "critical" || item.max_level === "high" ? "red" : "orange"}>{item.alert_count} æ¡</Tag>
+              <Tag color={item.max_level === "critical" || item.max_level === "high" ? "red" : "orange"}>{item.alert_count} 条</Tag>
             </button>
           ))}
         </div>
       ) : (
-        <Empty description="æš‚æ— é«˜é£Žé™©é—¨åº—" />
+        <Empty description="暂无高风险门店" />
       )}
     </Card>
   );
 
   const dashboardAlertsCard = (
-    <Card className="panel-card dashboard-alerts-card" title="å¼‚å¸¸é¢„è­¦é˜Ÿåˆ—" loading={loading}>
+    <Card className="panel-card dashboard-alerts-card" title="异常预警队列" loading={loading}>
       <Table
         pagination={false}
         rowKey="id"
         dataSource={alerts.slice(0, 5)}
         size="small"
         scroll={{ x: 560 }}
-        locale={{ emptyText: <Empty description="æš‚æ— é¢„è­¦" /> }}
+        locale={{ emptyText: <Empty description="暂无预警" /> }}
         columns={[
-          { title: "é—¨åº—", dataIndex: "store_name", width: 160, render: (value: string) => formatStoreName(value) },
-          { title: "æ ‡é¢˜", dataIndex: "title", render: (value: string) => formatAlertTitle(value) },
+          { title: "门店", dataIndex: "store_name", width: 160, render: (value: string) => formatStoreName(value) },
+          { title: "标题", dataIndex: "title", render: (value: string) => formatAlertTitle(value) },
           {
-            title: "ç­‰çº§",
+            title: "等级",
             dataIndex: "level",
             width: 82,
             render: (level: string) => <Tag color={level === "critical" || level === "high" ? "red" : "orange"}>{alertLevelLabel[level] || level}</Tag>
           },
           {
-            title: "åŠ¨ä½œ",
+            title: "动作",
             width: 76,
             render: (_: unknown, record: AlertRow) => (
               <Button size="small" onClick={() => router.push(`/alerts?alert_id=${record.id}`)}>
-                å¤„ç†
+                处理
               </Button>
             )
           }
@@ -611,52 +611,52 @@ export default function DashboardPage() {
   );
 
   const dashboardActivityCard = (
-    <Card className="panel-card dashboard-activity-card" title="å®žæ—¶åŠ¨æ€" loading={loading}>
+    <Card className="panel-card dashboard-activity-card" title="实时动态" loading={loading}>
       {notifications.length ? (
         <div className="activity-timeline">
           {notifications.map((item) => (
             <button className="activity-item" key={item.id} onClick={() => router.push(activityHref(item))}>
               <span className="activity-dot"><BellOutlined /></span>
               <span>
-                <b>{formatAlertTitle(item.title || "ç³»ç»Ÿé€šçŸ¥")}</b>
+                <b>{formatAlertTitle(item.title || "系统通知")}</b>
                 <small>
-                  {targetTypeLabel[item.target_type || ""] || item.target_type || "ç³»ç»Ÿ"} Â· {item.status === "pending" ? "å¾…å¤„ç†" : "å·²è®°å½•"}
+                  {targetTypeLabel[item.target_type || ""] || item.target_type || "系统"} · {item.status === "pending" ? "待处理" : "已记录"}
                 </small>
               </span>
             </button>
           ))}
         </div>
       ) : (
-        <Empty description="æš‚æ— å®žæ—¶åŠ¨æ€" />
+        <Empty description="暂无实时动态" />
       )}
     </Card>
   );
 
   const dashboardInsightCard = (
-    <Card className="panel-card dashboard-insight-card" title="ç»è¥æ´žå¯Ÿ" loading={loading}>
+    <Card className="panel-card dashboard-insight-card" title="经营洞察" loading={loading}>
       <div className="dashboard-insight-grid">
         <div className="dashboard-insight-summary">
-          <Alert type="info" showIcon message="AI æ‘˜è¦" description={sanitizeBusinessText(overview.summary)} />
+          <Alert type="info" showIcon message="AI 摘要" description={sanitizeBusinessText(overview.summary)} />
           <div className="dashboard-ai-stats">
             <div>
-              <span>å½’å› é¢„è­¦</span>
-              <b>{metrics.ai_alerts_month} æ¡</b>
+              <span>归因预警</span>
+              <b>{metrics.ai_alerts_month} 条</b>
             </div>
             <div>
-              <span>ç”Ÿæˆæ‘˜è¦</span>
-              <b>{metrics.ai_reports_month} ä»½</b>
+              <span>生成摘要</span>
+              <b>{metrics.ai_reports_month} 份</b>
             </div>
             <div>
-              <span>èŠ‚çœæ—¶é•¿</span>
-              <b>{metrics.saved_hours_month} å°æ—¶</b>
+              <span>节省时长</span>
+              <b>{metrics.saved_hours_month} 小时</b>
             </div>
           </div>
           <Button onClick={() => router.push("/alerts")} icon={<ArrowRightOutlined />}>
-            æŸ¥çœ‹æœ¬åœ°è§„åˆ™é¢„è­¦
+            查看本地规则预警
           </Button>
         </div>
         <div className="dashboard-insight-channels">
-          <div className="dashboard-insight-subtitle">æ¸ é“è¡¨çŽ°</div>
+          <div className="dashboard-insight-subtitle">渠道表现</div>
           {channels.length ? (
             <div className="dashboard-channel-grid">
               {channels.map((item) => (
@@ -668,7 +668,7 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <Empty description="æš‚æ— æ¸ é“æ•°æ®" />
+            <Empty description="暂无渠道数据" />
           )}
         </div>
       </div>
@@ -677,7 +677,7 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <section className="dashboard-kpi-grid dashboard-workbench-kpis" aria-label="ç»è¥æ ¸å¿ƒæŒ‡æ ‡">
+      <section className="dashboard-kpi-grid dashboard-workbench-kpis" aria-label="经营核心指标">
         {kpis.map((item) => (
           <Card className={`dashboard-kpi-card dashboard-kpi-${item.tone}`} key={item.key} loading={loading}>
             <div className="dashboard-kpi-head">
@@ -693,53 +693,53 @@ export default function DashboardPage() {
         ))}
       </section>
 
-      <section className="dashboard-workbench dashboard-workbench-v2" aria-label="ç»è¥çœ‹æ¿å·¥ä½œå°">
+      <section className="dashboard-workbench dashboard-workbench-v2" aria-label="经营看板工作台">
         <div className="dashboard-workbench-primary">
           {dashboardTrendCard}
           {dashboardAlertsCard}
           {dashboardInsightCard}
         </div>
-        <aside className="dashboard-workbench-sidebar" aria-label="å¤„ç†ä¾§æ ">
+        <aside className="dashboard-workbench-sidebar" aria-label="处理侧栏">
           {dashboardClosureCard}
           {dashboardRiskCard}
           {dashboardActivityCard}
         </aside>
       </section>
 
-      <section className="dashboard-action-dock" aria-label="ä»Šæ—¥å¤„ç†å°">
-        <Card className="panel-card dashboard-action-card" title="ä»Šæ—¥å¤„ç†å°">
+      <section className="dashboard-action-dock" aria-label="今日处理台">
+        <Card className="panel-card dashboard-action-card" title="今日处理台">
           <div className="dashboard-action-grid">
             <button className="dashboard-action-item danger" onClick={() => router.push("/alerts")}>
               <span><AlertOutlined /></span>
               <div>
-                <b>å¤„ç†å¼€æ”¾é¢„è­¦</b>
-                <small>{metrics.open_alerts} æ¡å¼€æ”¾ï¼Œä¸¥é‡ {metrics.critical_alerts} æ¡</small>
+                <b>处理开放预警</b>
+                <small>{metrics.open_alerts} 条开放,严重 {metrics.critical_alerts} 条</small>
               </div>
-              <em>æŸ¥çœ‹</em>
+              <em>查看</em>
             </button>
             <button className="dashboard-action-item warning" onClick={() => router.push("/tasks")}>
               <span><CheckCircleOutlined /></span>
               <div>
-                <b>æŽ¨è¿›æ•´æ”¹ä»»åŠ¡</b>
-                <small>{metrics.pending_tasks} ä¸ªå¾…å¤„ç†ï¼Œå·²é—­çŽ¯ {metrics.closed_tasks} ä¸ª</small>
+                <b>推进整改任务</b>
+                <small>{metrics.pending_tasks} 个待处理,已闭环 {metrics.closed_tasks} 个</small>
               </div>
-              <em>è¿›å…¥</em>
+              <em>进入</em>
             </button>
             <button className="dashboard-action-item" onClick={() => router.push("/alerts")}>
               <span><ThunderboltOutlined /></span>
               <div>
-                <b>æŸ¥çœ‹è§„åˆ™å½’å› </b>
-                <small>{metrics.ai_alerts_month} æ¡æœ¬åœ°å½’å› è®°å½•ï¼Œ{metrics.ai_reports_month} ä»½æœ¬åœ°æ‘˜è¦</small>
+                <b>查看规则归因</b>
+                <small>{metrics.ai_alerts_month} 条本地归因记录,{metrics.ai_reports_month} 份本地摘要</small>
               </div>
-              <em>æŸ¥çœ‹</em>
+              <em>查看</em>
             </button>
             <button className="dashboard-action-item" onClick={() => router.push("/data/imports")}>
               <span><CloudUploadOutlined /></span>
               <div>
-                <b>è¡¥å……ç»è¥æ•°æ®</b>
-                <small>ä»Šæ—¥å¯¼å…¥ {metrics.today_imports} æ¬¡ï¼Œå¯¼å…¥åŽè§¦å‘è§„åˆ™</small>
+                <b>补充经营数据</b>
+                <small>今日导入 {metrics.today_imports} 次,导入后触发规则</small>
               </div>
-              <em>å¯¼å…¥</em>
+              <em>导入</em>
             </button>
           </div>
         </Card>
@@ -747,4 +747,3 @@ export default function DashboardPage() {
     </AppShell>
   );
 }
-

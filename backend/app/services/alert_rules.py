@@ -162,7 +162,7 @@ def evaluate_sales_drop_row(db: Session, tenant_id: str, row: dict, user_id: str
     drop_pct = round((1 - float(ratio)) * 100, 1)
     title = f"{store['name']} 销售下滑 {drop_pct}%"
     summary = (
-        f"{row['biz_date']} 营收 {revenue:.2f} 元，低于过去同星期均值 {baseline:.2f} 元，"
+        f"{row['biz_date']} 营收 {revenue:.2f} 元,低于过去同星期均值 {baseline:.2f} 元,"
         "触发销售异常预警。"
     )
     alert = db.execute(
@@ -231,9 +231,9 @@ def evaluate_inventory_risk_row(db: Session, tenant_id: str, row: dict, user_id:
     level = "critical" if closing_stock == 0 else "warning"
     title = f"{store['name']} {material['name']} 库存风险"
     if closing_stock == 0:
-        summary = f"{row['biz_date']} {material['name']} 期末库存为 0，可能影响正常出品，需立即处理。"
+        summary = f"{row['biz_date']} {material['name']} 期末库存为 0,可能影响正常出品,需立即处理。"
     else:
-        summary = f"{row['biz_date']} {material['name']} 期末库存 {closing_stock:.2f}，低于或等于安全库存线 {safety_stock:.2f}。"
+        summary = f"{row['biz_date']} {material['name']} 期末库存 {closing_stock:.2f},低于或等于安全库存线 {safety_stock:.2f}。"
     alert = insert_alert(
         db,
         tenant_id=tenant_id,
@@ -298,9 +298,9 @@ def evaluate_bad_review_store(db: Session, tenant_id: str, store_id, user_id: st
     level = "critical" if food_safety_count else "warning"
     title = f"{store['name']} 差评风险"
     if food_safety_count:
-        summary = f"近 24 小时出现 {food_safety_count} 条食安关键词差评，需当日处理并复核门店出品。"
+        summary = f"近 24 小时出现 {food_safety_count} 条食安关键词差评,需当日处理并复核门店出品。"
     else:
-        summary = f"近 24 小时累计 {bad_count} 条低评分差评，需排查服务、包装、出餐和口感问题。"
+        summary = f"近 24 小时累计 {bad_count} 条低评分差评,需排查服务、包装、出餐和口感问题。"
     alert = insert_alert(
         db,
         tenant_id=tenant_id,
@@ -465,18 +465,18 @@ def insert_alert_notification(db: Session, alert: dict) -> None:
 
 def build_alert_notification_title(alert: dict) -> str:
     level_label = {"critical": "严重", "high": "高风险", "warning": "预警"}.get(str(alert.get("level") or ""), "预警")
-    return f"{level_label}经营预警：{alert.get('title') or alert.get('alert_type') or alert.get('id')}"
+    return f"{level_label}经营预警:{alert.get('title') or alert.get('alert_type') or alert.get('id')}"
 
 
 def build_alert_notification_content(alert: dict) -> str:
     lines = [
-        f"预警类型：{alert.get('alert_type') or 'unknown'}",
-        f"风险等级：{alert.get('level') or 'warning'}",
-        f"预警内容：{alert.get('summary') or ''}",
-        "请门店负责人先核实现场情况；督导和总部运营需跟进处理进展，必要时转为任务闭环。",
+        f"预警类型:{alert.get('alert_type') or 'unknown'}",
+        f"风险等级:{alert.get('level') or 'warning'}",
+        f"预警内容:{alert.get('summary') or ''}",
+        "请门店负责人先核实现场情况;督导和总部运营需跟进处理进展,必要时转为任务闭环。",
     ]
     if alert.get("due_at"):
-        lines.append(f"处理截止：{alert['due_at']}")
+        lines.append(f"处理截止:{alert['due_at']}")
     return "\n".join(lines)
 
 

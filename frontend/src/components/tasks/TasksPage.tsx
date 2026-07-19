@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   BellOutlined,
@@ -85,13 +85,13 @@ type ReviewFormValues = {
 type SupervisorTaskFilter = "all" | "scoped_store" | "pending_review" | "overdue" | "high" | "open";
 
 const statusLabel: Record<string, string> = {
-  pending_confirm: "å¾…ç¡®è®¤",
-  confirmed: "å·²ç¡®è®¤",
-  processing: "å¤„ç†ä¸­",
-  pending_review: "å¾…å®¡æ ¸",
-  closed: "å·²å…³é—­",
-  archived: "å·²å½’æ¡£",
-  overdue: "å·²é€¾æœŸ"
+  pending_confirm: "待确认",
+  confirmed: "已确认",
+  processing: "处理中",
+  pending_review: "待审核",
+  closed: "已关闭",
+  archived: "已归档",
+  overdue: "已逾期"
 };
 
 const statusColor: Record<string, string> = {
@@ -105,10 +105,10 @@ const statusColor: Record<string, string> = {
 };
 
 const priorityLabel: Record<string, string> = {
-  critical: "ç´§æ€¥",
-  high: "é«˜",
-  normal: "æ™®é€š",
-  low: "ä½Ž"
+  critical: "紧急",
+  high: "高",
+  normal: "普通",
+  low: "低"
 };
 
 const sourceLabel: Record<string, string> = {
@@ -119,12 +119,12 @@ const sourceLabel: Record<string, string> = {
 };
 
 const alertLevelLabel: Record<string, string> = {
-  critical: "ä¸¥é‡",
-  high: "é«˜é£Žé™©",
-  warning: "é¢„è­¦",
-  medium: "ä¸­é£Žé™©",
-  low: "ä½Žé£Žé™©",
-  normal: "æ™®é€š"
+  critical: "严重",
+  high: "高风险",
+  warning: "预警",
+  medium: "中风险",
+  low: "低风险",
+  normal: "普通"
 };
 
 const alertTypeLabel: Record<string, string> = {
@@ -134,10 +134,10 @@ const alertTypeLabel: Record<string, string> = {
 };
 
 const notificationStatusLabel: Record<string, string> = {
-  pending: "å¾…å¤„ç†",
-  sent: "å·²å¤„ç†",
-  ignored: "å·²å¿½ç•¥",
-  failed: "æŽ¨é€å¤±è´¥"
+  pending: "待处理",
+  sent: "已处理",
+  ignored: "已忽略",
+  failed: "推送失败"
 };
 
 const channelLabel: Record<string, string> = {
@@ -146,33 +146,33 @@ const channelLabel: Record<string, string> = {
 };
 
 const auditActionLabel: Record<string, string> = {
-  ALERT_TO_TASK: "é¢„è­¦æ´¾å‘ä»»åŠ¡",
-  TASK_FEEDBACK_SUBMIT: "åº—é•¿æäº¤åé¦ˆ",
-  TASK_REVIEW_APPROVE: "æ€»éƒ¨å®¡æ ¸é€šè¿‡",
-  TASK_REVIEW_RETURN: "æ€»éƒ¨é©³å›žé‡æŽ¨",
-  TASK_MARK_OVERDUE: "ä»»åŠ¡æ ‡è®°é€¾æœŸ"
+  ALERT_TO_TASK: "预警派发任务",
+  TASK_FEEDBACK_SUBMIT: "店长提交反馈",
+  TASK_REVIEW_APPROVE: "总部审核通过",
+  TASK_REVIEW_RETURN: "总部驳回重推",
+  TASK_MARK_OVERDUE: "任务标记逾期"
 };
 
 function formatDateTime(value?: string) {
-  if (!value) return "æœªè®¾ç½®";
+  if (!value) return "未设置";
   return value.replace("T", " ").replace("Z", "").slice(0, 19);
 }
 
 function formatSystemTitle(value?: string | null) {
-  if (!value) return "æœªå‘½åäº‹é¡¹";
-  if (/^codex[-_]/i.test(value)) return "ç³»ç»ŸéªŒæ”¶äº‹é¡¹";
-  if (/^Critical$/i.test(value)) return "ä¸¥é‡é¢„è­¦äº‹é¡¹";
+  if (!value) return "未命名事项";
+  if (/^codex[-_]/i.test(value)) return "系统验收事项";
+  if (/^Critical$/i.test(value)) return "严重预警事项";
   return value
-    .replaceAll("Codex", "ç³»ç»ŸéªŒæ”¶")
-    .replaceAll("Critical", "ä¸¥é‡")
-    .replaceAll("critical", "ä¸¥é‡");
+    .replaceAll("Codex", "系统验收")
+    .replaceAll("Critical", "严重")
+    .replaceAll("critical", "严重");
 }
 
 function splitReviewResult(result?: string) {
-  const [feedback, ...reviewParts] = String(result || "").split(/\n\nå®¡æ ¸æ„è§ï¼š/);
+  const [feedback, ...reviewParts] = String(result || "").split(/\n\n审核意见:/);
   return {
     feedback: feedback.trim(),
-    reviewNote: reviewParts.join("\n\nå®¡æ ¸æ„è§ï¼š").trim()
+    reviewNote: reviewParts.join("\n\n审核意见:").trim()
   };
 }
 
@@ -207,11 +207,11 @@ function priorityColor(value?: string) {
 
 function taskProgressItems(status: string) {
   const steps = [
-    { key: "pending_confirm", label: "å·²æ´¾å‘", description: "ä»»åŠ¡å·²ç”Ÿæˆå¹¶æŽ¨é€ç»™è´Ÿè´£äºº" },
-    { key: "confirmed", label: "å·²ç¡®è®¤", description: "è´Ÿè´£äººå·²ç¡®è®¤æ”¶åˆ°ä»»åŠ¡" },
-    { key: "processing", label: "å¤„ç†ä¸­", description: "é—¨åº—æ­£åœ¨å¤„ç†å¹¶å‡†å¤‡åé¦ˆ" },
-    { key: "pending_review", label: "å¾…å®¡æ ¸", description: "é—¨åº—å·²æäº¤åé¦ˆï¼Œç­‰å¾…æ€»éƒ¨å¤æ ¸" },
-    { key: "closed", label: "å·²å…³é—­", description: "æ€»éƒ¨å·²å®¡æ ¸é€šè¿‡å¹¶å…³é—­ä»»åŠ¡" }
+    { key: "pending_confirm", label: "已派发", description: "任务已生成并推送给负责人" },
+    { key: "confirmed", label: "已确认", description: "负责人已确认收到任务" },
+    { key: "processing", label: "处理中", description: "门店正在处理并准备反馈" },
+    { key: "pending_review", label: "待审核", description: "门店已提交反馈,等待总部复核" },
+    { key: "closed", label: "已关闭", description: "总部已审核通过并关闭任务" }
   ];
   const statusOrder = ["pending_confirm", "confirmed", "processing", "pending_review", "closed", "archived"];
   const currentIndex = statusOrder.indexOf(status);
@@ -288,7 +288,7 @@ export function TasksPage() {
       const res = await api.get("/api/v1/tasks");
       setTasks(res.data);
     } catch {
-      message.error("ä»»åŠ¡æ•°æ®åŠ è½½å¤±è´¥ï¼Œè¯·ç¡®è®¤åŽç«¯æœåŠ¡å’Œç™»å½•çŠ¶æ€");
+      message.error("任务数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -300,7 +300,7 @@ export function TasksPage() {
       const res = await api.get(`/api/v1/tasks/${taskId}`);
       setCurrentTask(res.data);
     } catch {
-      message.error("ä»»åŠ¡è¯¦æƒ…åŠ è½½å¤±è´¥");
+      message.error("任务详情加载失败");
     } finally {
       setDetailLoading(false);
     }
@@ -356,13 +356,13 @@ export function TasksPage() {
   async function updateStatus(record: TaskRecord, status: string) {
     try {
       await api.put(`/api/v1/tasks/${record.id}/status`, { status });
-      message.success("ä»»åŠ¡çŠ¶æ€å·²æ›´æ–°");
+      message.success("任务状态已更新");
       await load();
       if (currentTask?.id === record.id) {
         await refreshTaskDetail(record.id);
       }
     } catch {
-      message.error("ä»»åŠ¡çŠ¶æ€æ›´æ–°å¤±è´¥");
+      message.error("任务状态更新失败");
     }
   }
 
@@ -379,12 +379,12 @@ export function TasksPage() {
         result: values.result,
         feedback_img_urls: []
       });
-      message.success("åé¦ˆå·²æäº¤ï¼Œä»»åŠ¡è¿›å…¥å¾…å®¡æ ¸");
+      message.success("反馈已提交,任务进入待审核");
       setFeedbackOpen(false);
       await load();
       await refreshTaskDetail(currentTask.id);
     } catch {
-      message.error("åé¦ˆæäº¤å¤±è´¥");
+      message.error("反馈提交失败");
     }
   }
 
@@ -403,12 +403,12 @@ export function TasksPage() {
         approved,
         note: values.note
       });
-      message.success(approved ? "ä»»åŠ¡å·²å®¡æ ¸é€šè¿‡å¹¶å…³é—­" : "ä»»åŠ¡å·²é©³å›žï¼Œå¹¶å·²é‡æ–°æŽ¨é€ç»™é—¨åº—è´Ÿè´£äºº");
+      message.success(approved ? "任务已审核通过并关闭" : "任务已驳回,并已重新推送给门店负责人");
       setReviewOpen(false);
       await load();
       await refreshTaskDetail(currentTask.id);
     } catch {
-      message.error("ä»»åŠ¡å®¡æ ¸å¤±è´¥");
+      message.error("任务审核失败");
     }
   }
 
@@ -419,12 +419,12 @@ export function TasksPage() {
       setH5Url(res.data.h5_url);
       setCurrentTask(record);
       setH5Open(true);
-      message.success(`H5 é“¾æŽ¥å·²ç”Ÿæˆï¼Œå·²å†™å…¥${res.data.notification_channel || "system"}æŽ¨é€é€šçŸ¥ï¼Œç­‰å¾…è´Ÿè´£äººç¡®è®¤`);
+      message.success(`H5 链接已生成,已写入${res.data.notification_channel || "system"}推送通知,等待负责人确认`);
       if (detailOpen) {
         await refreshTaskDetail(record.id);
       }
     } catch {
-      message.error("H5 é“¾æŽ¥ç”Ÿæˆå¤±è´¥");
+      message.error("H5 链接生成失败");
     } finally {
       setTokenLoadingId(null);
     }
@@ -434,32 +434,32 @@ export function TasksPage() {
     <>
       <section className="flow-band">
         <div>
-          <span className="flow-kicker">ä»»åŠ¡é—­çŽ¯</span>
-          <div className="flow-title">æ‰¿æŽ¥é¢„è­¦æ´¾å•ã€åº—é•¿åé¦ˆä¸Žæ€»éƒ¨å®¡æ ¸</div>
+          <span className="flow-kicker">任务闭环</span>
+          <div className="flow-title">承接预警派单、店长反馈与总部审核</div>
           <div className="flow-text">
-            ä»»åŠ¡é—­çŽ¯è¦†ç›–æ´¾å‘ç¡®è®¤ã€é—¨åº—å¤„ç†ã€H5 åé¦ˆã€æ€»éƒ¨å¤æ ¸é€šè¿‡æˆ–é©³å›žé‡æŽ¨ã€‚
+            任务闭环覆盖派发确认、门店处理、H5 反馈、总部复核通过或驳回重推。
           </div>
         </div>
         <Space wrap>
-          <Tag color="purple">å¾…å®¡æ ¸ {summary.pendingReview}</Tag>
-          <Tag color="cyan">å¤„ç†ä¸­ {summary.processing}</Tag>
-          <Tag color="red">é€¾æœŸ {summary.overdue}</Tag>
-          <Tag color="green">å·²å…³é—­ {summary.closed}</Tag>
-          <Tag>å·²å½’æ¡£ {summary.archived}</Tag>
+          <Tag color="purple">待审核 {summary.pendingReview}</Tag>
+          <Tag color="cyan">处理中 {summary.processing}</Tag>
+          <Tag color="red">逾期 {summary.overdue}</Tag>
+          <Tag color="green">已关闭 {summary.closed}</Tag>
+          <Tag>已归档 {summary.archived}</Tag>
           <Button icon={<ReloadOutlined />} onClick={load} loading={loading}>
-            åˆ·æ–°
+            刷新
           </Button>
         </Space>
       </section>
 
       <Card
         className="panel-card"
-        title={`ä»»åŠ¡åˆ—è¡¨ Â· ${filteredTasks.length}/${summary.total}`}
+        title={`任务列表 · ${filteredTasks.length}/${summary.total}`}
         extra={
           <div className="task-filter-bar">
             <Input.Search
               allowClear
-              placeholder="æœç´¢ä»»åŠ¡ / é—¨åº— / è´Ÿè´£äºº"
+              placeholder="搜索任务 / 门店 / 负责人"
               value={keyword}
               onChange={(event) => setKeyword(event.target.value)}
               onSearch={setKeyword}
@@ -468,24 +468,24 @@ export function TasksPage() {
               value={supervisorFilter}
               onChange={setSupervisorFilter}
               options={[
-                { value: "all", label: "å…¨éƒ¨ä»»åŠ¡" },
-                { value: "scoped_store", label: "ç®¡è¾–é—¨åº—ä»»åŠ¡" },
-                { value: "pending_review", label: "å¾…æˆ‘å®¡æ ¸" },
-                { value: "overdue", label: "é€¾æœŸä»»åŠ¡" },
-                { value: "high", label: "é«˜ä¼˜å…ˆçº§" },
-                { value: "open", label: "æœªå…³é—­ä»»åŠ¡" }
+                { value: "all", label: "全部任务" },
+                { value: "scoped_store", label: "管辖门店任务" },
+                { value: "pending_review", label: "待我审核" },
+                { value: "overdue", label: "逾期任务" },
+                { value: "high", label: "高优先级" },
+                { value: "open", label: "未关闭任务" }
               ]}
             />
             <Select
               allowClear
-              placeholder="å…¨éƒ¨çŠ¶æ€"
+              placeholder="全部状态"
               value={statusFilter}
               onChange={setStatusFilter}
               options={Object.entries(statusLabel).map(([value, label]) => ({ value, label }))}
             />
             <Select
               allowClear
-              placeholder="å…¨éƒ¨ä¼˜å…ˆçº§"
+              placeholder="全部优先级"
               value={priorityFilter}
               onChange={setPriorityFilter}
               options={Object.entries(priorityLabel).map(([value, label]) => ({ value, label }))}
@@ -499,56 +499,56 @@ export function TasksPage() {
           dataSource={filteredTasks}
           scroll={{ x: 1180 }}
           rowClassName={(record) => (record.id === focusTaskId ? "table-row-focus" : "")}
-          locale={{ emptyText: <Empty description="æš‚æ— ä»»åŠ¡" /> }}
+          locale={{ emptyText: <Empty description="暂无任务" /> }}
           columns={[
             {
-              title: "ä»»åŠ¡",
+              title: "任务",
               dataIndex: "title",
               width: 330,
               render: (_: string, record: TaskRecord) => (
                 <div>
                   <div className="risk-title">{formatSystemTitle(record.title)}</div>
                   <div className="risk-meta">
-                    æ¥æºï¼š{sourceLabel[record.source_type || ""] || "æ‰‹åŠ¨åˆ›å»º"} Â· {record.store_name || "æœªå…³è”é—¨åº—"}
+                    来源:{sourceLabel[record.source_type || ""] || "手动创建"} · {record.store_name || "未关联门店"}
                   </div>
                 </div>
               )
             },
-            { title: "è´Ÿè´£äºº", dataIndex: "assignee_name", width: 120, render: (value: string) => value || "å¾…æŒ‡æ´¾" },
+            { title: "负责人", dataIndex: "assignee_name", width: 120, render: (value: string) => value || "待指派" },
             {
-              title: "ä¼˜å…ˆçº§",
+              title: "优先级",
               dataIndex: "priority",
               width: 96,
               render: (value: string) => <Tag color={priorityColor(value)}>{priorityLabel[value] || value}</Tag>
             },
             {
-              title: "çŠ¶æ€",
+              title: "状态",
               dataIndex: "status",
               width: 110,
               render: (value: string) => <Tag color={statusColor[value] || "default"}>{statusLabel[value] || value}</Tag>
             },
-            { title: "æˆªæ­¢æ—¶é—´", dataIndex: "due_at", width: 210, render: (value: string) => formatDateTime(value) },
-            { title: "åˆ›å»ºæ—¶é—´", dataIndex: "created_at", width: 210, render: formatDateTime },
+            { title: "截止时间", dataIndex: "due_at", width: 210, render: (value: string) => formatDateTime(value) },
+            { title: "创建时间", dataIndex: "created_at", width: 210, render: formatDateTime },
             {
-              title: "æ“ä½œ",
+              title: "操作",
               fixed: "right",
               width: 380,
               render: (_: unknown, record: TaskRecord) => (
                 <Space wrap>
                   <Button size="small" icon={<EyeOutlined />} onClick={() => openDetail(record)}>
-                    è¯¦æƒ…
+                    详情
                   </Button>
                   {canManageTasks ? (
                     <>
                       <Button size="small" onClick={() => updateStatus(record, "confirmed")} disabled={record.status !== "pending_confirm"}>
-                        ç¡®è®¤
+                        确认
                       </Button>
                       <Button
                         size="small"
                         onClick={() => updateStatus(record, "processing")}
                         disabled={!["confirmed", "overdue"].includes(record.status)}
                       >
-                        å¤„ç†
+                        处理
                       </Button>
                       <Button
                         size="small"
@@ -559,29 +559,29 @@ export function TasksPage() {
                         H5
                       </Button>
                       <Popconfirm
-                        title="ç¡®è®¤å½’æ¡£è¯¥ä»»åŠ¡ï¼Ÿ"
-                        okText="ç¡®è®¤"
-                        cancelText="å–æ¶ˆ"
+                        title="确认归档该任务?"
+                        okText="确认"
+                        cancelText="取消"
                         onConfirm={() => updateStatus(record, "archived")}
                       >
                         <Button size="small" disabled={record.status !== "closed"}>
-                          å½’æ¡£
+                          归档
                         </Button>
                       </Popconfirm>
                     </>
                   ) : null}
                   {canFeedbackTasks ? (
                     <Button size="small" type="primary" onClick={() => openFeedback(record)} disabled={record.status !== "processing"}>
-                      åé¦ˆ
+                      反馈
                     </Button>
                   ) : null}
                   {canApproveTasks ? (
                     <>
                       <Button size="small" onClick={() => openReview(record, "approve")} disabled={record.status !== "pending_review"}>
-                        é€šè¿‡
+                        通过
                       </Button>
                       <Button size="small" danger onClick={() => openReview(record, "return")} disabled={record.status !== "pending_review"}>
-                        é©³å›žé‡æŽ¨
+                        驳回重推
                       </Button>
                     </>
                   ) : null}
@@ -594,7 +594,7 @@ export function TasksPage() {
 
       <Drawer
         className="task-detail-drawer"
-        title={currentTask ? `ä»»åŠ¡è¯¦æƒ…ï¼š${formatSystemTitle(currentTask.title)}` : "ä»»åŠ¡è¯¦æƒ…"}
+        title={currentTask ? `任务详情:${formatSystemTitle(currentTask.title)}` : "任务详情"}
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
         width={720}
@@ -605,43 +605,43 @@ export function TasksPage() {
               <div>
                 <Space wrap size={8}>
                   <Tag color={statusColor[currentTask.status] || "default"}>{statusLabel[currentTask.status] || currentTask.status}</Tag>
-                  <Tag color={priorityColor(currentTask.priority)}>ä¼˜å…ˆçº§ï¼š{priorityLabel[currentTask.priority] || currentTask.priority}</Tag>
-                  <Tag>{sourceLabel[currentTask.source_type || ""] || "æ‰‹åŠ¨åˆ›å»º"}</Tag>
+                  <Tag color={priorityColor(currentTask.priority)}>优先级:{priorityLabel[currentTask.priority] || currentTask.priority}</Tag>
+                  <Tag>{sourceLabel[currentTask.source_type || ""] || "手动创建"}</Tag>
                 </Space>
                 <Typography.Title level={4}>{formatSystemTitle(currentTask.title)}</Typography.Title>
                 <Typography.Paragraph type="secondary">
-                  {currentTask.store_name || "æœªå…³è”é—¨åº—"} Â· {currentTask.department_name || "æœªè®¾ç½®éƒ¨é—¨"} Â· {currentTask.assignee_name || "å¾…æŒ‡æ´¾"}
+                  {currentTask.store_name || "未关联门店"} · {currentTask.department_name || "未设置部门"} · {currentTask.assignee_name || "待指派"}
                 </Typography.Paragraph>
               </div>
               <div className="task-detail-h5-hint">
                 <FileTextOutlined />
-                <span>H5 åé¦ˆå›žæµåŽï¼Œä»»åŠ¡è¿›å…¥æ€»éƒ¨å®¡æ ¸ã€‚</span>
+                <span>H5 反馈回流后,任务进入总部审核。</span>
               </div>
             </div>
 
             <div className="task-detail-metrics">
               <div>
-                <span>å½“å‰çŠ¶æ€</span>
+                <span>当前状态</span>
                 <b>{statusLabel[currentTask.status] || currentTask.status}</b>
               </div>
               <div>
-                <span>æˆªæ­¢æ—¶é—´</span>
+                <span>截止时间</span>
                 <b>{formatDateTime(currentTask.due_at)}</b>
               </div>
               <div>
-                <span>é€šçŸ¥è®°å½•</span>
-                <b>{currentTask.notifications?.length ?? 0} æ¡</b>
+                <span>通知记录</span>
+                <b>{currentTask.notifications?.length ?? 0} 条</b>
               </div>
               <div>
-                <span>å®¡è®¡è®°å½•</span>
-                <b>{currentTask.audit_logs?.length ?? 0} æ¡</b>
+                <span>审计记录</span>
+                <b>{currentTask.audit_logs?.length ?? 0} 条</b>
               </div>
             </div>
 
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <CheckCircleOutlined />
-                <span>é—­çŽ¯è¿›åº¦</span>
+                <span>闭环进度</span>
               </div>
               <Timeline className="task-progress-timeline" items={taskProgressItems(currentTask.status)} />
             </div>
@@ -649,70 +649,70 @@ export function TasksPage() {
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <ShopOutlined />
-                <span>å…³è”é¢„è­¦</span>
+                <span>关联预警</span>
               </div>
               {currentTask.related_alert ? (
                 <div className="task-related-alert">
                   <Space wrap>
-                    <Tag color={currentTask.related_alert.level === "critical" ? "red" : "orange"}>{alertLevelLabel[currentTask.related_alert.level || "normal"] || currentTask.related_alert.level || "æ™®é€š"}</Tag>
+                    <Tag color={currentTask.related_alert.level === "critical" ? "red" : "orange"}>{alertLevelLabel[currentTask.related_alert.level || "normal"] || currentTask.related_alert.level || "普通"}</Tag>
                     <Tag>{statusLabel[currentTask.related_alert.status || ""] || currentTask.related_alert.status || "-"}</Tag>
                     <Tag>{alertTypeLabel[currentTask.related_alert.alert_type || ""] || currentTask.related_alert.alert_type || "-"}</Tag>
                   </Space>
-                  <b>{formatSystemTitle(currentTask.related_alert.title || "æœªå‘½åé¢„è­¦")}</b>
-                  <p>{shortText(currentTask.related_alert.summary, "æš‚æ— å½’å› æ‘˜è¦")}</p>
+                  <b>{formatSystemTitle(currentTask.related_alert.title || "未命名预警")}</b>
+                  <p>{shortText(currentTask.related_alert.summary, "暂无归因摘要")}</p>
                   <Button size="small" icon={<LinkOutlined />} onClick={() => (window.location.href = `/alerts?alert_id=${currentTask.related_alert?.id}`)}>
-                    æŸ¥çœ‹é¢„è­¦
+                    查看预警
                   </Button>
                 </div>
               ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="æœªå…³è”é¢„è­¦" />
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="未关联预警" />
               )}
             </div>
 
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <FileTextOutlined />
-                <span>ç›¸å…³ SOP/çŸ¥è¯†æ£€ç´¢</span>
+                <span>相关 SOP/知识检索</span>
               </div>
             </div>
 
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <FileTextOutlined />
-                <span>åº—é•¿åé¦ˆä¸Žå®¡æ ¸</span>
+                <span>店长反馈与审核</span>
               </div>
               {currentTask.result ? (
                 <div className="task-feedback-block">
                   <div>
-                    <Typography.Text type="secondary">åº—é•¿å¤„ç†ç»“æžœ</Typography.Text>
+                    <Typography.Text type="secondary">店长处理结果</Typography.Text>
                     <p>{splitReviewResult(currentTask.result).feedback}</p>
                   </div>
                   {splitReviewResult(currentTask.result).reviewNote ? (
                     <div>
-                      <Typography.Text type="secondary">æ€»éƒ¨å®¡æ ¸æ„è§</Typography.Text>
+                      <Typography.Text type="secondary">总部审核意见</Typography.Text>
                       <p>{splitReviewResult(currentTask.result).reviewNote}</p>
                     </div>
                   ) : null}
                   {currentTask.feedback_img_urls?.length ? (
                     <div className="task-feedback-images">
-                      <Typography.Text type="secondary">æ•´æ”¹å‡­è¯å›¾ç‰‡</Typography.Text>
+                      <Typography.Text type="secondary">整改凭证图片</Typography.Text>
                       <Image.PreviewGroup>
                         {currentTask.feedback_img_urls.map((url, index) => (
-                          <Image key={url} src={assetUrl(url)} alt={`æ•´æ”¹å‡­è¯ ${index + 1}`} />
+                          <Image key={url} src={assetUrl(url)} alt={`整改凭证 ${index + 1}`} />
                         ))}
                       </Image.PreviewGroup>
                     </div>
                   ) : null}
                 </div>
               ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="é—¨åº—å°šæœªæäº¤åé¦ˆ" />
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="门店尚未提交反馈" />
               )}
             </div>
 
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <BellOutlined />
-                <span>å…³è”é€šçŸ¥</span>
+                <span>关联通知</span>
               </div>
               {currentTask.notifications?.length ? (
                 <List
@@ -722,34 +722,34 @@ export function TasksPage() {
                     <List.Item
                       actions={[
                         <Button key="notification" size="small" type="link" onClick={() => (window.location.href = `/notifications?notification_id=${item.id}`)}>
-                          æŸ¥çœ‹
+                          查看
                         </Button>
                       ]}
                     >
                       <List.Item.Meta
                         title={
                           <Space wrap>
-                            <span>{formatSystemTitle(item.title || "æœªå‘½åé€šçŸ¥")}</span>
+                            <span>{formatSystemTitle(item.title || "未命名通知")}</span>
                             <Tag>{channelLabel[item.channel] || item.channel}</Tag>
                             <Tag color={item.status === "failed" ? "red" : item.status === "sent" ? "green" : "gold"}>
                               {notificationStatusLabel[item.status] || item.status}
                             </Tag>
                           </Space>
                         }
-                        description={`é‡è¯• ${item.retry_count} æ¬¡ Â· ${formatDateTime(item.sent_at || item.created_at)}`}
+                        description={`重试 ${item.retry_count} 次 · ${formatDateTime(item.sent_at || item.created_at)}`}
                       />
                     </List.Item>
                   )}
                 />
               ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="æš‚æ— å…³è”é€šçŸ¥" />
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无关联通知" />
               )}
             </div>
 
             <div className="task-detail-section">
               <div className="task-detail-section-head">
                 <HistoryOutlined />
-                <span>å®¡è®¡è®°å½•</span>
+                <span>审计记录</span>
               </div>
               {currentTask.audit_logs?.length ? (
                 <Timeline
@@ -765,7 +765,7 @@ export function TasksPage() {
                   }))}
                 />
               ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="æš‚æ— å®¡è®¡è®°å½•" />
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无审计记录" />
               )}
             </div>
 
@@ -778,56 +778,56 @@ export function TasksPage() {
                     loading={tokenLoadingId === currentTask.id}
                     disabled={["closed", "archived", "pending_review"].includes(currentTask.status)}
                   >
-                    ç”Ÿæˆ H5 é“¾æŽ¥
+                    生成 H5 链接
                   </Button>
                   <Popconfirm
-                    title="ç¡®è®¤å½’æ¡£è¯¥ä»»åŠ¡ï¼Ÿ"
-                    okText="ç¡®è®¤"
-                    cancelText="å–æ¶ˆ"
+                    title="确认归档该任务?"
+                    okText="确认"
+                    cancelText="取消"
                     onConfirm={() => updateStatus(currentTask, "archived")}
                   >
-                    <Button disabled={currentTask.status !== "closed"}>å½’æ¡£</Button>
+                    <Button disabled={currentTask.status !== "closed"}>归档</Button>
                   </Popconfirm>
                 </>
               ) : null}
               {canFeedbackTasks ? (
                 <Button type="primary" onClick={() => openFeedback(currentTask)} disabled={currentTask.status !== "processing"}>
-                  æäº¤åé¦ˆ
+                  提交反馈
                 </Button>
               ) : null}
               {canApproveTasks ? (
                 <>
                   <Button onClick={() => openReview(currentTask, "approve")} disabled={currentTask.status !== "pending_review"}>
-                    é€šè¿‡å¹¶å…³é—­
+                    通过并关闭
                   </Button>
                   <Button danger onClick={() => openReview(currentTask, "return")} disabled={currentTask.status !== "pending_review"}>
-                    é©³å›žå¹¶é‡æŽ¨é—¨åº—
+                    驳回并重推门店
                   </Button>
                 </>
               ) : null}
             </Space>
-            {detailLoading ? <div className="task-detail-loading">æ­£åœ¨åˆ·æ–°ä»»åŠ¡è¯¦æƒ…...</div> : null}
+            {detailLoading ? <div className="task-detail-loading">正在刷新任务详情...</div> : null}
           </Space>
         ) : null}
       </Drawer>
 
-      <Modal className="responsive-modal task-flow-modal" title="æäº¤å¤„ç†åé¦ˆ" open={feedbackOpen} onCancel={() => setFeedbackOpen(false)} footer={null} forceRender destroyOnHidden zIndex={1300}>
+      <Modal className="responsive-modal task-flow-modal" title="提交处理反馈" open={feedbackOpen} onCancel={() => setFeedbackOpen(false)} footer={null} forceRender destroyOnHidden zIndex={1300}>
         <Form form={feedbackForm} preserve={false} layout="vertical" onFinish={submitFeedback}>
-          <Form.Item name="result" label="å¤„ç†ç»“æžœ" rules={[{ required: true, message: "è¯·è¾“å…¥å¤„ç†ç»“æžœ" }]}>
-            <Input.TextArea rows={4} placeholder="ä¾‹å¦‚ï¼šå·²è”ç³»é—¨åº—å¤ç›˜å‡ºæ¯æµç¨‹ï¼Œä»Šæ—¥æ™šé«˜å³°å¢žåŠ  1 åæŽ’ç­ã€‚" />
+          <Form.Item name="result" label="处理结果" rules={[{ required: true, message: "请输入处理结果" }]}>
+            <Input.TextArea rows={4} placeholder="例如:已联系门店复盘出杯流程,今日晚高峰增加 1 名排班。" />
           </Form.Item>
           <Space className="modal-action-row">
             <Button type="primary" htmlType="submit">
-              æäº¤åé¦ˆ
+              提交反馈
             </Button>
-            <Button onClick={() => setFeedbackOpen(false)}>å–æ¶ˆ</Button>
+            <Button onClick={() => setFeedbackOpen(false)}>取消</Button>
           </Space>
         </Form>
       </Modal>
 
       <Modal
         className="responsive-modal task-flow-modal"
-        title={reviewMode === "approve" ? "å®¡æ ¸é€šè¿‡" : "é©³å›žå¹¶é‡æ–°æŽ¨é€é—¨åº—"}
+        title={reviewMode === "approve" ? "审核通过" : "驳回并重新推送门店"}
         open={reviewOpen}
         onCancel={() => setReviewOpen(false)}
         footer={null}
@@ -837,14 +837,14 @@ export function TasksPage() {
       >
         {currentTask?.result ? (
           <div className="review-result-box">
-            <Typography.Text type="secondary">é—¨åº—åé¦ˆ</Typography.Text>
+            <Typography.Text type="secondary">门店反馈</Typography.Text>
             <div>{splitReviewResult(currentTask.result).feedback}</div>
             {currentTask.feedback_img_urls?.length ? (
               <div className="task-feedback-images compact">
-                <Typography.Text type="secondary">æ•´æ”¹å‡­è¯å›¾ç‰‡</Typography.Text>
+                <Typography.Text type="secondary">整改凭证图片</Typography.Text>
                 <Image.PreviewGroup>
                   {currentTask.feedback_img_urls.map((url, index) => (
-                    <Image key={url} src={assetUrl(url)} alt={`æ•´æ”¹å‡­è¯ ${index + 1}`} />
+                    <Image key={url} src={assetUrl(url)} alt={`整改凭证 ${index + 1}`} />
                   ))}
                 </Image.PreviewGroup>
               </div>
@@ -854,26 +854,26 @@ export function TasksPage() {
         <Form form={reviewForm} preserve={false} layout="vertical" onFinish={submitReview}>
           <Form.Item
             name="note"
-            label={reviewMode === "approve" ? "å®¡æ ¸æ„è§" : "é©³å›žåŽŸå› "}
-            rules={reviewMode === "return" ? [{ required: true, message: "è¯·å¡«å†™é©³å›žåŽŸå› ï¼Œé—¨åº—è´Ÿè´£äººä¼šåœ¨ H5 ä¸­çœ‹åˆ°è¿™æ¡è¯´æ˜Ž" }] : undefined}
+            label={reviewMode === "approve" ? "审核意见" : "驳回原因"}
+            rules={reviewMode === "return" ? [{ required: true, message: "请填写驳回原因,门店负责人会在 H5 中看到这条说明" }] : undefined}
           >
             <Input.TextArea
               rows={4}
-              placeholder={reviewMode === "approve" ? "å¯å¡«å†™æ€»éƒ¨å¤æ ¸æ„è§ï¼Œç•™ç©ºåˆ™ç›´æŽ¥å…³é—­ä»»åŠ¡ã€‚" : "è¯´æ˜Žé—¨åº—éœ€è¦é‡æ–°æ•´æ”¹æˆ–è¡¥å……åé¦ˆçš„å†…å®¹ï¼Œæäº¤åŽä¼šé‡æ–°ç”Ÿæˆ H5 é“¾æŽ¥å¹¶æŽ¨é€ã€‚"}
+              placeholder={reviewMode === "approve" ? "可填写总部复核意见,留空则直接关闭任务。" : "说明门店需要重新整改或补充反馈的内容,提交后会重新生成 H5 链接并推送。"}
             />
           </Form.Item>
           <Space className="modal-action-row">
             <Button type="primary" danger={reviewMode === "return"} htmlType="submit">
-              {reviewMode === "approve" ? "é€šè¿‡å¹¶å…³é—­" : "é©³å›žå¹¶é‡æ–°æŽ¨é€"}
+              {reviewMode === "approve" ? "通过并关闭" : "驳回并重新推送"}
             </Button>
-            <Button onClick={() => setReviewOpen(false)}>å–æ¶ˆ</Button>
+            <Button onClick={() => setReviewOpen(false)}>取消</Button>
           </Space>
         </Form>
       </Modal>
 
-      <Modal className="responsive-modal task-flow-modal" title={`åº—é•¿ H5 é“¾æŽ¥${currentTask ? `ï¼š${formatSystemTitle(currentTask.title)}` : ""}`} open={h5Open} onCancel={() => setH5Open(false)} footer={null} zIndex={1300}>
+      <Modal className="responsive-modal task-flow-modal" title={`店长 H5 链接${currentTask ? `:${formatSystemTitle(currentTask.title)}` : ""}`} open={h5Open} onCancel={() => setH5Open(false)} footer={null} zIndex={1300}>
         <Space direction="vertical" style={{ width: "100%" }}>
-          <Typography.Text type="secondary">å°†é“¾æŽ¥å‘é€ç»™åº—é•¿åŽï¼Œåé¦ˆä¼šå›žæµåˆ°å½“å‰ä»»åŠ¡å¹¶è¿›å…¥æ€»éƒ¨å®¡æ ¸ã€‚</Typography.Text>
+          <Typography.Text type="secondary">将链接发送给店长后,反馈会回流到当前任务并进入总部审核。</Typography.Text>
           <Input.TextArea value={h5Url} rows={3} readOnly />
           <Space className="modal-action-row">
             <Button
@@ -881,16 +881,15 @@ export function TasksPage() {
               icon={<CopyOutlined />}
               onClick={async () => {
                 await navigator.clipboard.writeText(h5Url);
-                message.success("é“¾æŽ¥å·²å¤åˆ¶");
+                message.success("链接已复制");
               }}
             >
-              å¤åˆ¶é“¾æŽ¥
+              复制链接
             </Button>
-            <Button icon={<LinkOutlined />} onClick={() => window.open(h5Url, "_blank", "noopener,noreferrer")}>æ‰“å¼€ H5</Button>
+            <Button icon={<LinkOutlined />} onClick={() => window.open(h5Url, "_blank", "noopener,noreferrer")}>打开 H5</Button>
           </Space>
         </Space>
       </Modal>
     </>
   );
 }
-

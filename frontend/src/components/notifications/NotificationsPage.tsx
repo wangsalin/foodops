@@ -144,7 +144,7 @@ export function NotificationsPage() {
       setRecords(listRes.data);
       setSummary(summaryRes.data);
     } catch {
-      message.error("通知数据加载失败，请确认后端服务和登录状态");
+      message.error("通知数据加载失败,请确认后端服务和登录状态");
     } finally {
       setLoading(false);
     }
@@ -182,7 +182,7 @@ export function NotificationsPage() {
       status === "all" ? "全部状态" : statusLabel[status],
       targetType === "all" ? "全部类型" : targetTypeLabel[targetType] || targetType
     ];
-    if (keyword) parts.push(`关键词：${keyword}`);
+    if (keyword) parts.push(`关键词:${keyword}`);
     return parts.join(" / ");
   }, [keyword, status, targetType]);
 
@@ -232,7 +232,7 @@ export function NotificationsPage() {
         <div>
           <span className="flow-kicker">通知中心</span>
           <div className="flow-title">待处理通知 · {summary?.pending ?? 0} / 全部 {summary?.total ?? 0}</div>
-          <div className="flow-text">Community 版只保留系统内通知，用于预警、任务和反馈闭环。</div>
+          <div className="flow-text">Community 版只保留系统内通知,用于预警、任务和反馈闭环。</div>
         </div>
         <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={load} loading={loading}>刷新</Button>
@@ -310,7 +310,7 @@ export function NotificationsPage() {
                       <div className="notification-row-title">{record.title || "未命名通知"}</div>
                       <div className="notification-row-summary">{record.content || "无通知内容"}</div>
                       <div className="notification-row-meta">
-                        接收人：{recipientName(record)} · 对象：{shortId(record.target_id)} · 创建 {formatDateTime(record.created_at)}
+                        接收人:{recipientName(record)} · 对象:{shortId(record.target_id)} · 创建 {formatDateTime(record.created_at)}
                       </div>
                     </div>
                   </div>
@@ -365,10 +365,10 @@ export function NotificationsPage() {
                 </Button>
                 {canManageNotifications ? (
                   <>
-                    <Popconfirm title="确认标记为已发送？" okText="确认" cancelText="取消" onConfirm={() => updateStatus(currentRecord, "sent")}>
+                    <Popconfirm title="确认标记为已发送?" okText="确认" cancelText="取消" onConfirm={() => updateStatus(currentRecord, "sent")}>
                       <Button icon={<CheckCircleOutlined />} disabled={currentRecord.status !== "pending"} loading={updatingId === currentRecord.id}>标记已发送</Button>
                     </Popconfirm>
-                    <Popconfirm title="确认忽略这条通知？" okText="确认" cancelText="取消" onConfirm={() => updateStatus(currentRecord, "ignored")}>
+                    <Popconfirm title="确认忽略这条通知?" okText="确认" cancelText="取消" onConfirm={() => updateStatus(currentRecord, "ignored")}>
                       <Button disabled={currentRecord.status !== "pending"} loading={updatingId === currentRecord.id}>忽略</Button>
                     </Popconfirm>
                   </>

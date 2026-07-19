@@ -73,12 +73,12 @@ def _decode_token(token: str, expected_type: str) -> dict:
     try:
         claims = jwt.decode(token, _verify_key(), algorithms=[_algorithm()])
     except jwt.PyJWTError as exc:
-        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效，请重新登录", status_code=401) from exc
+        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效,请重新登录", status_code=401) from exc
     token_type = claims.get("typ", "access")
     if token_type != expected_type:
-        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效，请重新登录", status_code=401)
+        raise AppError(code="AUTH_TOKEN_INVALID", message="登录已失效,请重新登录", status_code=401)
     if is_token_blacklisted(token, claims):
-        raise AppError(code="AUTH_TOKEN_REVOKED", message="登录已退出，请重新登录", status_code=401)
+        raise AppError(code="AUTH_TOKEN_REVOKED", message="登录已退出,请重新登录", status_code=401)
     return claims
 
 
